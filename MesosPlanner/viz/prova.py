@@ -1,0 +1,73 @@
+from datetime import *
+import copy
+import sys
+from PIL import ImageDraw
+from PIL import Image
+
+
+
+def main():
+    path=sys.argv[1]
+    data=parseFile(path)
+    drawLines(data,path)
+
+def parseTime(timeString):
+    d = datetime.strptime(timeString,"%X.%f")
+    return d
+
+def drawLines(data,n):
+    c = copy.deepcopy(data)
+    skip=0
+    first=None
+    clean=[]
+    for d in c:
+        ex=findBest(c)
+        if(first==None):
+            first=ex['time']
+        skip=(ex['time']-first)
+        st=ex['name']
+        prDur=abs(skip.total_seconds()/10.0)
+        st+= " "*int(prDur)
+        st+= "*"* int(ex["dur"])
+        print(st+"\n")
+        clean.append({"name":ex['name'],"st":prDur,"d":int(ex["dur"])})
+        c.remove(ex)
+    drawPNG(clean,n)
+        
+
+def drawPNG(data,name):
+
+    im = Image.new('RGB',(1000,2500))
+    
+    drw = ImageDraw.ImageDraw(im)
+    
+    for i,d in enumerate(data):
+        drw.text((0,15+i*10),d['name'])
+        drw.line((40+d['st'],15+i*10,40+d['d']+d['st'],15+i*10),fill=255)
+
+    drw.text((1,1),name)
+    im.save(name.replace(".txt",".png"),'PNG')
+        
+
+def findBest(c):
+    best=None
+    for e in c:
+        if(best==None):
+            best=e
+        else:
+            if best['time']>e['time']:
+                
+                best=e
+    return best
+
+def parseFile(path):
+    f = open(path,'r')
+    procs=[]
+    for i,l in enumerate(f.readlines()):
+        raw=l.split(",")
+        if(len(raw)==4):
+            procs.append({"name":raw[1],"time":parseTime(raw[2].strip()),"dur":raw[3].replace(";\n","")})
+
+    return procs
+
+main()
