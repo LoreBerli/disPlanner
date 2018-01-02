@@ -39,8 +39,6 @@ public class Job implements Schedulable{
 
     //TODO: deadline come LocalDateTime , checkDeadline(LocalDateTime proposedStart) , cambiare tutti gli ''int start'' in ''LocalDateTime tStart''
     private Task tsk;
-    private int start;
-    private int end;
     private boolean reAllocable;
     private int priority;
 
@@ -77,8 +75,6 @@ public class Job implements Schedulable{
     public Job(Task tsk,int start,int end,Machine m){
 
         this.tsk=tsk;
-        this.start=start;
-        this.end=end;
         this.assignedMachine=m;
         this.secondsDuration =tsk.getExpectedDUR();
         //System.out.println("EXPECTED DURATION INITIALIZED TO "+this.secondsDuration);
@@ -86,8 +82,6 @@ public class Job implements Schedulable{
 
     public Job(Job j){
         this.tsk=j.tsk;
-        this.start=j.start;
-        this.end=j.end;
         this.assignedMachine=j.assignedMachine;
         this.secondsDuration =tsk.getExpectedDUR();
     }
@@ -146,8 +140,8 @@ public class Job implements Schedulable{
     public int getSecondsDuration(){
         return secondsDuration;
     }
-    public int getStart(){
-        return start;
+    public LocalDateTime getStart(){
+        return this.tStart;
     }
     public void setAssignedMachine(Machine m){
         this.assignedMachine=m;
@@ -171,6 +165,11 @@ public class Job implements Schedulable{
     @Override
     public String toString() {
         return this.tsk.getDescriptor()+" , "+ this.tStart.format(DateTimeFormatter.ISO_LOCAL_TIME) + " , " +this.getSecondsDuration()+";\n";
+    }
+
+    @Override
+    public void updateConsumption(){
+        return;
     }
 
 }

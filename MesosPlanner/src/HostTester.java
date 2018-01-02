@@ -26,7 +26,7 @@ public class HostTester {
             vmPark.add(tmp);
         }
         //Jobs
-        List<Job> jobs = TestingUtils.generateDummyJobs(500,20);
+        List<Job> jobs = TestingUtils.generateDummyJobs(100,240);
         //////////////////////////////////////////
         ScheduleManager vmManager = new ScheduleManager(vmPark);
 
@@ -36,22 +36,28 @@ public class HostTester {
         // Alloco i Jobs
         vmManager.allocateJobs();
 
-        for(Receiver m:vmPark){
-            lg.logNodeInfo(m,"");
-            m.saveSchedule();
-            m.saveLoads();
-        }
+
+
         //////////////////////////////////////////
         ScheduleManager machinesManager = new ScheduleManager(machines);
 
         machinesManager.setNewSchedule(vmPark);
 
         machinesManager.allocateJobs();
+
+        ////////////////////////////////////////
         for(Receiver m:machines){
             lg.logNodeInfo(m,"");
             m.saveSchedule();
             m.saveLoads();
         }
+        for(Receiver m:vmPark){
+            lg.logNodeInfo(m,"");
+            m.saveSchedule();
+            m.saveLoads();
+        }
+
+
 
 
     }

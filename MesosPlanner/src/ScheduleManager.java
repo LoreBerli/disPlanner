@@ -53,9 +53,11 @@ public class ScheduleManager {
     public boolean allocateJobs(){
 
         for (Schedulable j:toBeAllocated){
+            j.updateConsumption();
             Receiver best = binPacker.findOptimum(j,nodes);
             while(best==null){
                 //TODO : qui fa schifo!
+                j.updateConsumption();
                 j.setStart(j.getStartTime().plusSeconds(20));
                 best = binPacker.findOptimum(j,nodes);
             }
@@ -81,8 +83,8 @@ public class ScheduleManager {
                 return false;
             }
         }
-        System.out.println("SCHEDULABLES:");
-        System.out.println(toBeAllocated);
+        //System.out.println("SCHEDULABLES:");
+        //System.out.println(toBeAllocated);
         return true;
     }
 

@@ -9,6 +9,7 @@ public interface Schedulable {
     //public int[] averageResDuringCurrentSchedule();
     public int getExpectedDUR();
     public int getExpectedDSK();
+    void updateConsumption();
 
     void setStart(LocalDateTime t);
     Task getTask();

@@ -410,6 +410,11 @@ public class Machine implements Receiver,Schedulable{
     }
 
     @Override
+    public void updateConsumption(){
+        return;
+    }
+
+    @Override
     public int getExpectedCPU() {
         return 0;
     }

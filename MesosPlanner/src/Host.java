@@ -170,16 +170,18 @@ public class Host implements Receiver,Schedulable{
     }
 
     public boolean queueJob(Schedulable j){
-
+        int cz = this.currentSchedule.size();
         Map<Schedulable,LocalDateTime> proposedSchedule=new HashMap<Schedulable,LocalDateTime>(this.currentSchedule);
         proposedSchedule.put(j,j.getStartTime());
         if(checkSchedule(proposedSchedule)){
-            currentSchedule.put(j,j.getStartTime());
-            //System.out.println("Ho allocato con successo " +j.getTask().getDescriptor()+" su "+this.ID);
+            this.currentSchedule.put(j,j.getStartTime());
+            System.out.println("Ho allocato con successo " +j.getInfo()+" su "+this.ID);
+            assert (cz<this.currentSchedule.size());
+            updateAverageResDuringCurrentSchedule();
             return true;
         }
         System.out.println("Ho fallito nell'allocare un job su "+this.ID);
-        averageResDuringCurrentSchedule();
+        //updateAverageResDuringCurrentSchedule();
         //System.out.println("job"+j.getTask());
         return false;
     }
@@ -192,31 +194,43 @@ public class Host implements Receiver,Schedulable{
      */
     private List<Schedulable> jobsAtTimeT (LocalDateTime t, Map<Schedulable,LocalDateTime> proposedSchedule){
         //ordino i job per startingTime
-        Map<Schedulable,LocalDateTime> ordered=proposedSchedule.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        if(proposedSchedule.size()>0) {
+            Map<Schedulable, LocalDateTime> ordered = proposedSchedule.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                    (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 
-        List<Schedulable> inExecutionAtTime=new ArrayList<>();
+            List<Schedulable> inExecutionAtTime = new ArrayList<>();
 
-        Set s = ordered.entrySet();
+            Set s = ordered.entrySet();
+            int diff=0;
+            Iterator it = s.iterator();
+            while(it.hasNext()) {
+                Map.Entry<Schedulable, LocalDateTime> ss = (Map.Entry) it.next();
+                LocalDateTime tmp = ss.getValue();
 
-        Iterator it = s.iterator();
-        //System.out.println("Iterator.size= "+s.size());
-        if(it.hasNext()){
-            Map.Entry<Schedulable,LocalDateTime> ss = (Map.Entry)it.next();
-            LocalDateTime tmp = ss.getValue();
-
-            while(it.hasNext() && tmp.isBefore(t)){//scorro i job con startTime precedente a t
-                if(ss.getKey().getEndTime().isAfter(t)){//se terminano dopo t
-                    inExecutionAtTime.add(ss.getKey());//li aggiungo alla lista dei job in esecuzione al tempo t
+                if (tmp.isBefore(t.plusSeconds(5))) {//scorro i job con startTime precedente a t
+                    if (ss.getKey().getEndTime().isAfter(t.minusSeconds(5))) {//se terminano dopo t
+                        inExecutionAtTime.add(ss.getKey());//li aggiungo alla lista dei job in esecuzione al tempo t
+                    }
                 }
-                ss=(Map.Entry) it.next();
-                tmp=ss.getValue();
+                if (tmp.isBefore(t.plusSeconds(5))) {//scorro i job con startTime precedente a t
+                    if (ss.getKey().getEndTime().isAfter(t.minusSeconds(5))) {//se terminano dopo t
+                        diff++;
+                        //inExecutionAtTime.add(ss.getKey());//li aggiungo alla lista dei job in esecuzione al tempo t
+                    }
+                }
+
+
 
             }
-            //System.out.println("Ci sono "+inExecutionAtTime.size()+" jobs al tempo "+t.toString());
-            //System.out.println(inExecutionAtTime.toString());
-            //System.out.println("InExecutionAtTime.size= "+inExecutionAtTime.size());
-            return inExecutionAtTime;}
+//            if(this.ID!="phy1" || this.ID=="phy2"){
+//            System.out.println("DIIIIF:"+inExecutionAtTime.size()+" "+diff+" "+this.ID+" "+t);}
+
+                //System.out.println("Ci sono "+inExecutionAtTime.size()+" jobs al tempo "+t.toString());
+                //System.out.println(inExecutionAtTime.toString());
+                //System.out.println("InExecutionAtTime.size= "+inExecutionAtTime.size());
+                return inExecutionAtTime;
+
+        }
         return new ArrayList<>();
     }
     /**
@@ -264,28 +278,33 @@ public class Host implements Receiver,Schedulable{
         return avg;
     }
 
-    public int[] averageResDuringCurrentSchedule(){
+    public float[] updateAverageResDuringCurrentSchedule(){
 
-        int[][] loads= new int[currentSchedule.size()][3];
+        float[][] loads= new float[currentSchedule.size()][3];
         int i=0;
         for(Map.Entry<Schedulable,LocalDateTime> e : currentSchedule.entrySet()){
-            loads[i]=checkResAtTime(e.getValue());
+            loads[i]=checkNormalizedResAtTime(e.getValue());
             i++;
         }
-        int[] avg = {0,0,0};
-        for(int j =0;j< loads.length;j++){
+        float[] avg = {0,0,0};
+
+        for(int j =0;j< currentSchedule.size();j++){
             avg[0]+=loads[j][0];
             avg[1]+=loads[j][1];
             avg[2]+=loads[j][2];
             //System.out.println(loads[j]);
         }
         //System.out.println("---");
-        avg[0]=avg[0]/loads.length;
-        this.expectedCPU=avg[0];
-        avg[1]=avg[1]/loads.length;
-        this.expectedRAM=avg[1];
-        avg[2]=avg[2]/loads.length;
-        this.expextedDSK=avg[2];
+        ///workaronud
+        //System.out.println("ofFsake prima: "+avg[0]+"-"+avg[1]+"-"+avg[2]);
+        avg[0]=avg[0]/(float)loads.length;
+        this.expectedCPU=(int)Math.ceil(this.totalCPU*avg[0]);
+        avg[1]=avg[1]/(float)loads.length;
+        this.expectedRAM=(int)Math.ceil(this.totalMEM*avg[1]);
+        avg[2]=avg[2]/(float)loads.length;
+        this.expextedDSK=(int)Math.ceil(this.totalDSK*avg[2]);
+        //System.out.println("ofFsake: "+avg[0]+"-"+avg[1]+"-"+avg[2]);
+        //System.out.println("ofFsake: "+this.expectedCPU+"-"+this.expectedRAM+"-"+this.expextedDSK);
         return avg;
     }
 
@@ -361,27 +380,27 @@ public class Host implements Receiver,Schedulable{
     public void saveLoads() throws IOException{
         Writer writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream("loadsLog/"+this.ID+"Loads.txt"), "utf-8"));
-        if(this.currentSchedule.values().size()<1){
+        if(this.currentSchedule.values().size()==0){
             return;}
         LocalDateTime min = Collections.min(this.currentSchedule.values(), new Comparator<LocalDateTime>() {
             @Override
             public int compare(LocalDateTime localDateTime, LocalDateTime t1) {
-                return localDateTime.isBefore(t1)? 0:1;
+                return localDateTime.isAfter(t1)? 1:-1;
             }
         });
         LocalDateTime max = Collections.max(this.currentSchedule.values(),new Comparator<LocalDateTime>() {
             @Override
             public int compare(LocalDateTime localDateTime, LocalDateTime t1) {
-                return localDateTime.isBefore(t1)? 0:1;
+                return localDateTime.isAfter(t1)? 1:-1;
             }
         });
         System.out.println(min);
         System.out.println(max);
         System.out.println(this.getEndTime());
-        this.averageResDuringCurrentSchedule();
+        this.updateAverageResDuringCurrentSchedule();
         System.out.println("--------"+this.ID+" "+this.currentSchedule.size());
         //writer.write("--------"+this.ID+" "+this.currentSchedule.size()+"\n");
-        for(LocalDateTime start=min;start.isBefore(this.getEndTime());start=start.plusSeconds(20)){
+        for(LocalDateTime start=min.minusSeconds(20);start.isBefore(this.getEndTime());start=start.plusSeconds(20)){
             float[] res = this.checkNormalizedResAtTime(start);
             writer.write(" "+start.toString()+","+this.checkLoadAtTime(start)+","+this.jobsAtTimeT(start,this.currentSchedule).size()+","+Float.toString(res[0])+","+Float.toString(res[1])+","+Float.toString(res[2])+"\n");
         }
@@ -397,15 +416,17 @@ public class Host implements Receiver,Schedulable{
         return getInfo();
     }
     public String getInfo(){
+        this.updateAverageResDuringCurrentSchedule();
         String info=this.ID;
         info+=" CPU:"+this.getTotalCPU();
         info+=" MEM:"+this.getTotalMEM();
         info+=" DSK:"+this.getTotalDSK();
         info+=" schedule_size:"+this.currentSchedule.size();
         info+=" average_load:"+this.averageLoadDuringCurrentSchedule();
-        if(this.currentSchedule.size()>1){
-        info+=" startTime:"+this.getStartTime().toString();
-            info+=" endTime:"+this.getEndTime().toString();}
+        if(this.currentSchedule.size()>0) {
+            info += " startTime:" + this.getStartTime().toString();
+            info += " endTime:" + this.getEndTime().toString();
+        }
         info+="\n";
         return info;
     }
@@ -413,12 +434,17 @@ public class Host implements Receiver,Schedulable{
     @Override
     public LocalDateTime getStartTime() {
         LocalDateTime min = Collections.min(this.currentSchedule.values(), new Comparator<LocalDateTime>() {
+
             @Override
             public int compare(LocalDateTime localDateTime, LocalDateTime t1) {
-                return localDateTime.isBefore(t1)? 0:1;
+
+                return localDateTime.isAfter(t1)? 1:-1;
             }
         });
-        //System.out.println("il minimo per "+this.ID+" è : "+min);
+
+//        System.out.println("il min su"+this.ID+" è : "+min);
+//        System.out.println("infatti:");
+//        System.out.println(this.currentSchedule.values());
         return min;
     }
 
@@ -428,10 +454,10 @@ public class Host implements Receiver,Schedulable{
         Map.Entry<Schedulable,LocalDateTime> max = Collections.max(this.currentSchedule.entrySet(),new Comparator <Map.Entry<Schedulable,LocalDateTime>>() {
             @Override
             public int compare(Map.Entry<Schedulable,LocalDateTime> m0,Map.Entry<Schedulable,LocalDateTime> m1) {
-                return m0.getValue().isBefore(m1.getValue())? 0:1;
+                return m0.getValue().isAfter(m1.getValue())? 1:-1;
             }
         });
-        // LocalDateTime non supporta il confronto fra due istanze.porcaputtana
+        // LocalDateTime non supporta il confronto fra due istanze
 
         return max.getValue().plusSeconds(max.getKey().getExpectedDUR());
     }
@@ -439,7 +465,7 @@ public class Host implements Receiver,Schedulable{
     @Override
     public boolean isSchedulable() {
 
-        return currentSchedule.size()>1;
+        return currentSchedule.size()>0;
     }
 
     @Override
@@ -450,8 +476,10 @@ public class Host implements Receiver,Schedulable{
 
     @Override
     public int getExpectedMEM() {
-        return expectedRAM;
+        return this.expectedRAM;
     }
+
+
     //TODO:questa non restiusce la durata totale della VM. Manca il tempo di esecuzione dell'ultimo processo
     @Override
     public int getExpectedDUR() {
@@ -464,17 +492,30 @@ public class Host implements Receiver,Schedulable{
 
     @Override
     public int getExpectedDSK() {
-        return expextedDSK;
+        return this.expextedDSK;
     }
 
     @Override
     public void setStart(LocalDateTime t) {
-        //TODO : SHIFTA LA SCHEDULE DI t
+        Map<Schedulable,LocalDateTime> different = new HashMap<>(this.currentSchedule);
+        long offset=Duration.between(t,this.getStartTime()).getSeconds();
+        //this.(this.getStartTime().plusSeconds(offset));
+        for(Map.Entry<Schedulable,LocalDateTime> entry:this.currentSchedule.entrySet()){
+            different.put(entry.getKey(),entry.getValue().plusSeconds(offset));
+        }
+        this.currentSchedule=different;
+
+
 
     }
 
     @Override
     public Task getTask() {
         return null;
+    }
+
+    @Override
+    public void updateConsumption(){
+        this.updateAverageResDuringCurrentSchedule();
     }
 }

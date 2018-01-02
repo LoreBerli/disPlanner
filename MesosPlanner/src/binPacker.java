@@ -27,25 +27,27 @@ public class binPacker {
             mSchedule.put(toBeScheduled,toBeScheduled.getStartTime());
             //creo un nuovo scheduling aggiungendo a quello vecchio il nuovo job da schedulare
             float[] res = m.checkNormalizedResAtTime(toBeScheduled.getStartTime(),mSchedule);
-            //Float fit = (float)((res[0]+res[1]+res[2])/res.length);
             //TODO: cambiare sta cosa
             Float[] jesusReally=new Float[3];
-            jesusReally[0]=new Float(res[0]);
-            jesusReally[1]=new Float(res[1]);
-            jesusReally[2]=new Float(res[2]);
-
+            jesusReally[0]=res[0];
+            jesusReally[1]=res[1];
+            jesusReally[2]=res[2];
+            //System.out.println( "BINPACKIN' "+m.getInfo()+" "+res[0]+" "+res[1]+" "+res[2]);
             //controllo la fitness del nodo con il nuovo job
             fits.put(m,jesusReally);
         }
 
-        float[] bestValues=new float[]{Float.MIN_VALUE,Float.MIN_VALUE,Float.MIN_VALUE};
+        float[] bestValues=new float[]{-1f,-1f,-1f};
+
         Receiver[] bestMachines=new Receiver[3];
+
         for(Map.Entry<Receiver,Float[]> e:fits.entrySet()){
             Float[] rez = e.getValue();
             for(int k=0;k<3;k++) {
-                if (bestMachines[k] == null && rez[k] < 0.9f) {
-                    bestMachines[k] = e.getKey();
-                }
+//                if (bestMachines[k] == null && rez[k] < 0.9f) {
+//                    bestMachines[k] = e.getKey();
+//                    bestValues[k] = rez[k];
+//                }
                 if (rez[k] >bestValues[k] && rez[k] < 0.9f) {
                     bestMachines[k] = e.getKey();
                     bestValues[k] = rez[k];
@@ -53,15 +55,19 @@ public class binPacker {
             }
 
         }
-        int index=0;
         float best=Float.MAX_VALUE;
         Receiver bst= null;
         for(int f=0;f<3;f++){
-            if(bestValues[f]<best && bestValues[f]<1.0){
-                System.out.println("====> "+bestValues[f]);
-                best=bestValues[f];
-                index=f;
-                bst=bestMachines[index];
+            //TODO: qui c'è il baho.
+            if(bestMachines[f]!=null) {
+                if (bestValues[f] < best && fits.get(bestMachines[f])[0] < 0.9 && fits.get(bestMachines[f])[1] < 0.9 && fits.get(bestMachines[f])[2] < 0.9) {
+                    //System.out.println("====> " + bestValues[f] + "(" + bestValues[0] + "," + bestValues[1] + "," + bestValues[2] + ")"+ bestMachines[f].getInfo());
+                    best = bestValues[f];
+                    bst = bestMachines[f];
+                }
+            }
+            else{
+                //System.out.println("Beep"+f);
             }
         }
         
@@ -75,10 +81,10 @@ public class binPacker {
 
         if(bst==null){
             System.out.println("No suitable node found - Changing JOB:"+ toBeScheduled.toString() +" StartTime");
-            System.out.println(fits.toString());
+            //System.out.println(fits.toString());
             return null;
         }
-//        try{
+// try{
 //            Logger lg = new Logger("");
 //            lg.binPackerInfo(toBeScheduled,fits,bst);
 //        }
@@ -90,38 +96,6 @@ public class binPacker {
 
     }
 
-    static public Machine findPerResourcesOptimum(Job toBeScheduled,List<Machine> park){
-        //vedi metriche di Fenzo, fa la stessa cosa
-        Map<Machine,Float> fits = new HashMap<>();
-
-        for (Machine m:park) {
-            Map<Job,LocalDateTime> mSchedule =new HashMap<>(m.getCurrentSchedule());
-            mSchedule.put(toBeScheduled,toBeScheduled.getStartTime());
-            float[] res = m.checkNormalizedResAtTime(toBeScheduled.getStartTime(),mSchedule);
-            Float fit = (float)((res[0]+res[1]+res[2])/res.length);
-            fits.put(m,fit);
-        }
-
-        float bestValue=Float.MIN_VALUE;
-        Map.Entry<Machine,Float> bst=null;
-        for(Map.Entry<Machine,Float> e:fits.entrySet()){
-            if(bst==null && e.getValue()<0.9f){
-                bst=e;
-            }
-            if(e.getValue()>bestValue && e.getValue()<0.9f){
-                bst=e;
-                bestValue=e.getValue();
-            }
-
-        }
-        if(bst==null){
-            System.out.println("No suitable node found - Changing JOB:"+ toBeScheduled.toString() +" StartTime");
-            System.out.println(fits.toString());
-            return null;
-        }
-        return bst.getKey();
-
-    }
 
 
 
