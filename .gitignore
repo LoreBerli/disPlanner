@@ -1,2 +1,4 @@
+*.properties
 *.txt
 *.png
+out/production
