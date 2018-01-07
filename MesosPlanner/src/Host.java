@@ -201,23 +201,18 @@ public class Host implements Receiver,Schedulable{
             List<Schedulable> inExecutionAtTime = new ArrayList<>();
 
             Set s = ordered.entrySet();
-            int diff=0;
+
             Iterator it = s.iterator();
             while(it.hasNext()) {
                 Map.Entry<Schedulable, LocalDateTime> ss = (Map.Entry) it.next();
                 LocalDateTime tmp = ss.getValue();
 
-                if (tmp.isBefore(t.plusSeconds(5))) {//scorro i job con startTime precedente a t
-                    if (ss.getKey().getEndTime().isAfter(t.minusSeconds(5))) {//se terminano dopo t
+                if (tmp.isBefore(t)) {//scorro i job con startTime precedente a t
+                    if (ss.getKey().getEndTime().isAfter(t)) {//se terminano dopo t
                         inExecutionAtTime.add(ss.getKey());//li aggiungo alla lista dei job in esecuzione al tempo t
                     }
                 }
-                if (tmp.isBefore(t.plusSeconds(5))) {//scorro i job con startTime precedente a t
-                    if (ss.getKey().getEndTime().isAfter(t.minusSeconds(5))) {//se terminano dopo t
-                        diff++;
-                        //inExecutionAtTime.add(ss.getKey());//li aggiungo alla lista dei job in esecuzione al tempo t
-                    }
-                }
+
 
 
 
@@ -449,12 +444,14 @@ public class Host implements Receiver,Schedulable{
     }
 
     @Override
+    //BACO, calcolavo la durata cercando il job che parte per ultimo invece che quello che finisce per ultimo
     public LocalDateTime getEndTime() {
 
         Map.Entry<Schedulable,LocalDateTime> max = Collections.max(this.currentSchedule.entrySet(),new Comparator <Map.Entry<Schedulable,LocalDateTime>>() {
             @Override
             public int compare(Map.Entry<Schedulable,LocalDateTime> m0,Map.Entry<Schedulable,LocalDateTime> m1) {
-                return m0.getValue().isAfter(m1.getValue())? 1:-1;
+
+                return m0.getValue().plusSeconds(m0.getKey().getExpectedDUR()).isAfter(m1.getValue().plusSeconds(m1.getKey().getExpectedDUR()))? 1:-1;
             }
         });
         // LocalDateTime non supporta il confronto fra due istanze
@@ -486,6 +483,7 @@ public class Host implements Receiver,Schedulable{
         LocalDateTime start=getStartTime();
         LocalDateTime end=getEndTime();
         Duration offset = Duration.between(start ,end);//???????????????????????????????????????
+
         return (int)offset.getSeconds();
 
     }
