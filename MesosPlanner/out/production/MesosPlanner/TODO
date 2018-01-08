@@ -1,4 +1,0 @@
-Per far funzionare il binPacker sia con (MACHINE + JOB) che con (PHYSICALNODE + MACHINE) dovrebbero implementare delle interfacce.
-MACHINE : BIN & BINNABLE
-JOB : BINNABLE
-PHYSICALNODE : BIN

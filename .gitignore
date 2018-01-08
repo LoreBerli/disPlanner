@@ -1,4 +1,5 @@
 *.properties
 *.txt
 *.png
-out/production
+MesosPlanner/out/production/*
+MesosPlanner/logs/*
