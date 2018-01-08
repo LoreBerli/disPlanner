@@ -21,7 +21,7 @@ public class Logger {
         writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("logs/outLog"), "utf-8"));
         String toWrite="";
         toWrite+=node.getInfo();
-        writer.write(toWrite);
+        writer.append(toWrite);
         writer.close();
     }
 

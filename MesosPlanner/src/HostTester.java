@@ -26,7 +26,7 @@ public class HostTester {
             vmPark.add(tmp);
         }
         //Jobs
-        List<Job> jobs = TestingUtils.generateDummyJobs(100,240);
+        List<Job> jobs = TestingUtils.generateDummyJobs(300,60);
         //////////////////////////////////////////
         ScheduleManager vmManager = new ScheduleManager(vmPark);
 

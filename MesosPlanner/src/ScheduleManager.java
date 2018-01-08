@@ -26,7 +26,6 @@ public class ScheduleManager {
 
 
     public void setNewSchedule(List<? extends Schedulable> schedule) {
-
         this.toBeAllocated = schedule;
         this.failedToAllocate=new ArrayList<>(schedule);
         this.allocated=new ArrayList<>();
@@ -40,7 +39,7 @@ public class ScheduleManager {
                 clean.add(s);
             }
             else {
-                System.out.println("not schedulable");
+                System.out.println(s.getInfo()+" is not schedulable");
             }
         }
         this.toBeAllocated=clean;

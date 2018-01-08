@@ -124,7 +124,7 @@ public class Host implements Receiver,Schedulable{
         for(Map.Entry<Schedulable,LocalDateTime> j:proposedSchedule.entrySet()){
             loads[i]=checkNormalizedResAtTime(j.getValue(),proposedSchedule);
             for(int k=0;k<3;k++) {
-                if (loads[i][k] > 0.9f) {
+                if (loads[i][k] > this.treshold) {
                     float[] res = loads[i];
                     System.out.println("-----: " + res[0] + " " + res[1] + " " + res[2]);
                 }
@@ -134,7 +134,7 @@ public class Host implements Receiver,Schedulable{
         }
         for(int j=0;j<loads.length;j++){
             for(int k =0;k<3;k++) {
-                if (loads[j][k]> 0.9f) {
+                if (loads[j][k]> this.treshold) {
                     System.out.println("fallito per il job:" + j + "-esimo:"+" => "+loads[j][k]);
                     System.out.println(proposedSchedule);
                     return false;
@@ -169,20 +169,23 @@ public class Host implements Receiver,Schedulable{
         return this.ID+"  -:CPU:"+this.getUsedCPU()+" MEM:"+this.getUsedMEM()+" DSK:"+this.getTotalDSK();
     }
 
+
+    /**
+     * Tenta di allocare uno Schedulable, controlla l'utilizzo delle risorse al tStart dello schedulable
+     * se il controllo fallisce ritorna false.
+     * @param j
+     * @return boolean
+     */
     public boolean queueJob(Schedulable j){
-        int cz = this.currentSchedule.size();
-        Map<Schedulable,LocalDateTime> proposedSchedule=new HashMap<Schedulable,LocalDateTime>(this.currentSchedule);
-        proposedSchedule.put(j,j.getStartTime());
-        if(checkSchedule(proposedSchedule)){
+        Map<Schedulable,LocalDateTime> proposedSchedule=new HashMap<Schedulable,LocalDateTime>(this.currentSchedule);//copio la schedule corrente
+        proposedSchedule.put(j,j.getStartTime()); //ci aggiungo il job
+        if(checkSchedule(proposedSchedule)){ //testo se la schedule nuova proposta funziona
             this.currentSchedule.put(j,j.getStartTime());
             System.out.println("Ho allocato con successo " +j.getInfo()+" su "+this.ID);
-            assert (cz<this.currentSchedule.size());
             updateAverageResDuringCurrentSchedule();
             return true;
         }
         System.out.println("Ho fallito nell'allocare un job su "+this.ID);
-        //updateAverageResDuringCurrentSchedule();
-        //System.out.println("job"+j.getTask());
         return false;
     }
 
@@ -212,24 +215,13 @@ public class Host implements Receiver,Schedulable{
                         inExecutionAtTime.add(ss.getKey());//li aggiungo alla lista dei job in esecuzione al tempo t
                     }
                 }
-
-
-
-
             }
-//            if(this.ID!="phy1" || this.ID=="phy2"){
-//            System.out.println("DIIIIF:"+inExecutionAtTime.size()+" "+diff+" "+this.ID+" "+t);}
-
-                //System.out.println("Ci sono "+inExecutionAtTime.size()+" jobs al tempo "+t.toString());
-                //System.out.println(inExecutionAtTime.toString());
-                //System.out.println("InExecutionAtTime.size= "+inExecutionAtTime.size());
                 return inExecutionAtTime;
-
         }
         return new ArrayList<>();
     }
     /**
-     * Ritorna un float tra 0.0 e 1.0 con il "carico" eventuale al tempo con la currentSChedule
+     * Ritorna un float tra 0.0 e 1.0 con il "carico" eventuale al tempo con la currentSchedule
      */
     public float checkLoadAtTime(LocalDateTime t,Map<Schedulable,LocalDateTime> proposedSchedule){
 
@@ -243,7 +235,6 @@ public class Host implements Receiver,Schedulable{
             normalizedCPU+=(float)j.getExpectedCPU()/(float)this.getTotalCPU();
             normalizedMEM+=(float)j.getExpectedMEM()/(float)this.getTotalMEM();
             normalizedDSK+=(float)j.getExpectedDSK()/(float)this.getTotalDSK();
-            //System.out.println("normCPU_: "+normalizedCPU);
         }
         return (normalizedCPU+normalizedMEM+normalizedDSK)/3f;
     }
@@ -422,7 +413,7 @@ public class Host implements Receiver,Schedulable{
             info += " startTime:" + this.getStartTime().toString();
             info += " endTime:" + this.getEndTime().toString();
         }
-        info+="\n";
+        //info+="\n";
         return info;
     }
 
@@ -436,15 +427,10 @@ public class Host implements Receiver,Schedulable{
                 return localDateTime.isAfter(t1)? 1:-1;
             }
         });
-
-//        System.out.println("il min su"+this.ID+" è : "+min);
-//        System.out.println("infatti:");
-//        System.out.println(this.currentSchedule.values());
         return min;
     }
 
     @Override
-    //BACO, calcolavo la durata cercando il job che parte per ultimo invece che quello che finisce per ultimo
     public LocalDateTime getEndTime() {
 
         Map.Entry<Schedulable,LocalDateTime> max = Collections.max(this.currentSchedule.entrySet(),new Comparator <Map.Entry<Schedulable,LocalDateTime>>() {
@@ -454,20 +440,16 @@ public class Host implements Receiver,Schedulable{
                 return m0.getValue().plusSeconds(m0.getKey().getExpectedDUR()).isAfter(m1.getValue().plusSeconds(m1.getKey().getExpectedDUR()))? 1:-1;
             }
         });
-        // LocalDateTime non supporta il confronto fra due istanze
-
         return max.getValue().plusSeconds(max.getKey().getExpectedDUR());
     }
 
     @Override
     public boolean isSchedulable() {
-
         return currentSchedule.size()>0;
     }
 
     @Override
     public int getExpectedCPU() {
-
         return expectedCPU;
     }
 
@@ -476,14 +458,15 @@ public class Host implements Receiver,Schedulable{
         return this.expectedRAM;
     }
 
-
-    //TODO:questa non restiusce la durata totale della VM. Manca il tempo di esecuzione dell'ultimo processo
+    /**
+     * Ritorna la durata, in secondi,del processo
+      * @return
+     */
     @Override
     public int getExpectedDUR() {
         LocalDateTime start=getStartTime();
         LocalDateTime end=getEndTime();
-        Duration offset = Duration.between(start ,end);//???????????????????????????????????????
-
+        Duration offset = Duration.between(start ,end);
         return (int)offset.getSeconds();
 
     }
@@ -493,6 +476,10 @@ public class Host implements Receiver,Schedulable{
         return this.expextedDSK;
     }
 
+    /**
+     * Permette di settare l'accensione dell'host. Aggiorna automaticamente il tStart di tutti i processi shiftandoli
+     * @param t
+     */
     @Override
     public void setStart(LocalDateTime t) {
         Map<Schedulable,LocalDateTime> different = new HashMap<>(this.currentSchedule);
