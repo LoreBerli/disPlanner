@@ -13,6 +13,8 @@ public interface Receiver {
     float[] checkNormalizedResAtTime(LocalDateTime t,Map< ? extends Schedulable, LocalDateTime> proposedSchedule);
     float[] checkNormalizedResAtTime(LocalDateTime t);
     float checkLoadAtTime(LocalDateTime t);
+    LocalDateTime getStartTime();
+    LocalDateTime getEndTime();
 
 
 }

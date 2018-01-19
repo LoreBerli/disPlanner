@@ -46,16 +46,25 @@ public class HostTester {
         machinesManager.allocateJobs();
 
         ////////////////////////////////////////
+
+        PlannerDeamon deam = new PlannerDeamon();
+
+        //////////////////////////
         for(Receiver m:machines){
             lg.logNodeInfo(m,"");
             m.saveSchedule();
             m.saveLoads();
+            deam.addRecevier(m,m.getCurrentSchedule());
+
         }
+
+        deam.run();
         for(Receiver m:vmPark){
             lg.logNodeInfo(m,"");
             m.saveSchedule();
             m.saveLoads();
         }
+
 
 
 

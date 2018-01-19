@@ -106,9 +106,11 @@ public class DbInterface {
         return machines;
     }
 
+    //
     public boolean writeScheduleToDb() throws java.sql.SQLException{
         Statement stmt = conn.createStatement();
         String query="INSERT INTO "+this.scheduleTable+" VALUES(";
+
         return true;
     }
 
