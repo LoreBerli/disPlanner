@@ -4,8 +4,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.net.URL;
 import java.util.stream.Collectors;
 public class PlannerDeamon extends Thread {
 /*
@@ -72,7 +74,8 @@ TODO: usare un database per leggere la schedule
             if(LocalDateTime.now().isAfter(prossimo.getKey())){
 
                 System.out.println("======== "+prossimo.getValue()+"  "+prossimo.getKey());
-                sendSignal("VMON");
+                String[] data = {"prova"};
+                sendSignal("VMON",data);
                 //System.out.println("Il prKASFASFLKANS "+prossimo.getValue()+" "+prossimo.getKey());
                 prossimo=it.next();
                 //System.out.println("Il prssimo a "+prossimo.getValue()+" "+prossimo.getKey());
@@ -99,12 +102,23 @@ TODO: usare un database per leggere la schedule
 
         JSONObject j= new JSONObject(commandSpecific);
         int params=j.length();
-        assert (params==data.length);
-        for(int i=0;i<params;i++){
+        assert (params==data.length-1);
+        for(int i=0;i<data.length;i++){
             j.put("vmName",data[i]);
         }
 
         System.out.println(j.toString());
+
+
+    }
+
+
+    private void allocatorCall(String url)throws IOException{
+
+        URL u = new URL(url);
+        InputStream is = u.openStream();
+
+
 
 
     }
