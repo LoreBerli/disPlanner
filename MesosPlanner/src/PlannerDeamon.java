@@ -1,24 +1,45 @@
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
+import org.json.*;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.stream.Collectors;
 public class PlannerDeamon extends Thread {
 /*
 Problema: ScheduleManager alloca degli Schedulable su dei Receiver, non crea una vera schedule dei processi.
-TODO: ricevere la schedule da ScheduleManager
-TODO: generare eventi ai t nella schedule
+DONE: ricevere la schedule da ScheduleManager
+DONE: generare eventi ai t nella schedule
+TODO: usare le API dell'Allocator
 TODO: usare un database per leggere la schedule
  */
     private Map<LocalDateTime,String> messageSchedule;
     private boolean running;
     private Map<Receiver,Map<? extends Schedulable,LocalDateTime>> nodes;
+
+    Properties apiFile;
+    Properties allocatorFile;
+
+
     public PlannerDeamon(){
         messageSchedule=new HashMap<>();
         nodes=new HashMap<>();
         running=true;
+        apiFile=new Properties();
+        allocatorFile=new Properties();
+        try{
+        InputStream apinp = new FileInputStream("src/apis.properties");
+        InputStream alinp = new FileInputStream("src/allocator.properties");
+        apiFile.load(apinp);
+        allocatorFile.load(alinp);
+        }
+        catch (IOException io){
+            System.out.println("opssss");
+        }
+
+
 
 
     }
@@ -38,22 +59,23 @@ TODO: usare un database per leggere la schedule
     }
 
     public void run(){
-        //TODO TESTARE il check sul tempo.
+        //DONE: TESTARE il check sul tempo.
         sortSchedule();
         Iterator<Map.Entry<LocalDateTime,String>> it=messageSchedule.entrySet().iterator();
 
-        //TODO:sort sulle date. I messaggi non sono ordinati per tempo di invio.
+        //DONE:sort sulle date. I messaggi non sono ordinati per tempo di invio.
         Map.Entry<LocalDateTime,String> prossimo = it.next();
-        System.out.println("Il primo parte a "+prossimo.getValue()+" "+prossimo.getKey());
+        //System.out.println("Il primo parte a "+prossimo.getValue()+" "+prossimo.getKey());
         while(running && it.hasNext()){
             //System.out.println("=== "+LocalDateTime.now()+"  "+prossimo.getKey()+" "+prossimo.getKey().isBefore(LocalDateTime.now()));
 //            if(prossimo.getKey().isAfter(LocalDateTime.now())){
             if(LocalDateTime.now().isAfter(prossimo.getKey())){
 
                 System.out.println("======== "+prossimo.getValue()+"  "+prossimo.getKey());
-                System.out.println("Il prKASFASFLKANS "+prossimo.getValue()+" "+prossimo.getKey());
+                sendSignal("VMON");
+                //System.out.println("Il prKASFASFLKANS "+prossimo.getValue()+" "+prossimo.getKey());
                 prossimo=it.next();
-                System.out.println("Il prssimo a "+prossimo.getValue()+" "+prossimo.getKey());
+                //System.out.println("Il prssimo a "+prossimo.getValue()+" "+prossimo.getKey());
             }
 
 
@@ -70,7 +92,22 @@ TODO: usare un database per leggere la schedule
 
     }
 
+    private void sendSignal(String type,String[] data){
+        String general = "http://"+allocatorFile.getProperty("hostname")+":"+allocatorFile.getProperty("port")+allocatorFile.getProperty("pre");
+        String commandSpecific = apiFile.getProperty(type);
+        System.out.println(commandSpecific);
 
+        JSONObject j= new JSONObject(commandSpecific);
+        int params=j.length();
+        assert (params==data.length);
+        for(int i=0;i<params;i++){
+            j.put("vmName",data[i]);
+        }
+
+        System.out.println(j.toString());
+
+
+    }
 //    private LocalDateTime findEarliestStartTime(Map<Schedulable,LocalDateTime> sched){
 //        return
 //    }
