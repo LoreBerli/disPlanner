@@ -10,6 +10,12 @@ import java.util.stream.Collectors;
  *Funziona come interfaccia esterna esponendo metodi per accogliere job
  * Created by cioni on 08/10/17.
  */
+
+//TODO: Dinamica degli Schedulable "non schedulable".
+// Assegnarli PRIMA dello scheduling, rimuoverli dal pool di quelli schedulabili e iniziare lo scheduling degli altri.
+
+
+
 public class ScheduleManager {
     /*
 
@@ -39,6 +45,8 @@ public class ScheduleManager {
                 clean.add(s);
             }
             else {
+                if(s.getRecevier()!=null){
+                s.getRecevier().queueJob(s);}
                 System.out.println(s.getInfo()+" is not schedulable");
             }
         }

@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,18 @@ public class HostTester {
         }
         //Jobs
         List<Job> jobs = TestingUtils.generateDummyJobs(300,60);
-        //////////////////////////////////////////
+        ////////////////////////////////////////////
+        Task t = new Task("unmovable",2,200,20,120);
+        Job j = new Job(t, LocalDateTime.now().plusSeconds(300),1,false,vmPark.get(1));
+        System.out.println("UNMOVABLE SU:"+j.getAssignedMachine().getInfo());
+        jobs.add(j);
+
+        Host vm0 = vmPark.get(1);
+
+        vm0.setSchedulability(false);
+        vm0.setReceiver(phy1);
+        System.out.println("set to not move;:"+vm0.ID+ " from "+phy1.ID);
+        ////////////////////////////////////////////
         ScheduleManager vmManager = new ScheduleManager(vmPark);
 
         // Passo allo scheduler una lista di Jobs

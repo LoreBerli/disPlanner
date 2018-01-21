@@ -1,6 +1,8 @@
 import java.time.LocalDateTime;
 
 public interface Schedulable {
+    Receiver getRecevier();
+
     LocalDateTime getStartTime();
     LocalDateTime getEndTime();
     boolean isSchedulable();

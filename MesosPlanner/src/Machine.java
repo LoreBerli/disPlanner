@@ -66,6 +66,11 @@ public class Machine implements Receiver,Schedulable{
         }
     }
 
+    @Override
+    public Receiver getRecevier() {
+        return null;
+    }
+
     public void setUsedMEM(int usedMEM) {
         if(usedMEM<=totalMEM){
         this.usedMEM = usedMEM;}

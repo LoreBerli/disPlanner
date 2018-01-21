@@ -2,6 +2,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -26,6 +27,7 @@ public class ScheduleTester {
         //Task t = getOneFromDB(db);
         //System.out.println(t);
         List<Job> jobs = TestingUtils.generateDummyJobs(700,20);
+
         List<Machine> park;
         try{
         park = db.getRealMachines();}
@@ -36,6 +38,10 @@ public class ScheduleTester {
         }
 
         park= park.subList(0,4);
+
+
+
+
 
         ScheduleManager scheduleManager = new ScheduleManager(park);
 

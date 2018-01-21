@@ -23,11 +23,11 @@ public class Host implements Receiver,Schedulable{
     private int usedCPU;
     private int usedMEM;
     private int usedDSK;
-
+    private boolean isSchedulable=true;
     private int expectedCPU;
     private int expectedRAM;
     private int expextedDSK;
-
+    private Receiver assignedMachine;
     private int internalTick;
     private float treshold;
     private List<Schedulable> inExecution;
@@ -72,6 +72,18 @@ public class Host implements Receiver,Schedulable{
         if(usedDSK<=totalDSK) {
             this.usedDSK = usedDSK;
         }
+    }
+
+    @Override
+    public Receiver getRecevier() {
+        return this.assignedMachine;
+    }
+
+    public void setReceiver(Receiver r){
+        this.assignedMachine=r;
+    }
+    public void setSchedulability(boolean isSchedulable){
+        this.isSchedulable=isSchedulable;
     }
 
     public void setUsedMEM(int usedMEM) {
@@ -446,7 +458,7 @@ public class Host implements Receiver,Schedulable{
     @Override
 
     public boolean isSchedulable() {
-        return currentSchedule.size()>0;
+        return currentSchedule.size()>0 && isSchedulable;
     }
 
     @Override

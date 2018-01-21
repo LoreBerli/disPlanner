@@ -59,9 +59,9 @@ public class Job implements Schedulable{
     /**
      * {@link Machine} a cui il {@link Job} è stato assegnato
      */
-    private Machine assignedMachine;
+    private Receiver assignedMachine;
 
-    public Job(Task tsk,LocalDateTime start,int priority,boolean reAllocable,Machine m){
+    public Job(Task tsk,LocalDateTime start,int priority,boolean reAllocable,Receiver m){
 
         this.tsk=tsk;
         this.tStart=start;
@@ -69,6 +69,7 @@ public class Job implements Schedulable{
         this.reAllocable=reAllocable;
         this.assignedMachine=m;
         this.secondsDuration =tsk.getExpectedDUR();
+        if(!reAllocable){assert this.assignedMachine!=null;}
         //System.out.println("EXPECTED DURATION INITIALIZED TO "+this.secondsDuration);
     }
 
@@ -85,6 +86,9 @@ public class Job implements Schedulable{
         this.assignedMachine=j.assignedMachine;
         this.secondsDuration =tsk.getExpectedDUR();
     }
+    public Receiver getRecevier(){
+        return this.assignedMachine;
+    }
 
     public LocalDateTime getStartTime(){
         return tStart;
@@ -95,7 +99,7 @@ public class Job implements Schedulable{
 
     @Override
     public boolean isSchedulable() {
-        return true;
+        return reAllocable;
     }
 
     @Override
@@ -122,21 +126,21 @@ public class Job implements Schedulable{
      * Calcola quanto il {@link Job} sia "removable".
      * @return float
      */
-    public float removability(){//metrica di "importanza" per i JOB
-        if(!reAllocable){
-            return 0f;
-        }
-        else {
-            float relativeCPU = (float)this.tsk.getExpectedCPU()/(float)this.assignedMachine.getTotalCPU();
-            float relativeMEM = (float)this.tsk.getExpectedMEM()/(float)this.assignedMachine.getTotalMEM();
-            float relativeDSK = (float)this.tsk.getExpectedDSK()/(float)this.assignedMachine.getTotalDSK();
-            float resourcesSUM=relativeCPU+relativeMEM+relativeDSK;
-            float r=(float)(priority+1)*resourcesSUM*(float) secondsDuration;
-
-            return r;
-
-        }
-    }
+//    public float removability(){//metrica di "importanza" per i JOB
+//        if(!reAllocable){
+//            return 0f;
+//        }
+//        else {
+//            float relativeCPU = (float)this.tsk.getExpectedCPU()/(float)this.assignedMachine.getTotalCPU();
+//            float relativeMEM = (float)this.tsk.getExpectedMEM()/(float)this.assignedMachine.getTotalMEM();
+//            float relativeDSK = (float)this.tsk.getExpectedDSK()/(float)this.assignedMachine.getTotalDSK();
+//            float resourcesSUM=relativeCPU+relativeMEM+relativeDSK;
+//            float r=(float)(priority+1)*resourcesSUM*(float) secondsDuration;
+//
+//            return r;
+//
+//        }
+//    }
     public int getSecondsDuration(){
         return secondsDuration;
     }
@@ -146,7 +150,7 @@ public class Job implements Schedulable{
     public void setAssignedMachine(Machine m){
         this.assignedMachine=m;
     }
-    public Machine getAssignedMachine(){
+    public Receiver getAssignedMachine(){
         return this.assignedMachine;
     }
     public Task getTask(){

@@ -76,9 +76,8 @@ TODO: usare un database per leggere la schedule
                 System.out.println("======== "+prossimo.getValue()+"  "+prossimo.getKey());
                 String[] data = {"prova"};
                 sendSignal("VMON",data);
-                //System.out.println("Il prKASFASFLKANS "+prossimo.getValue()+" "+prossimo.getKey());
                 prossimo=it.next();
-                //System.out.println("Il prssimo a "+prossimo.getValue()+" "+prossimo.getKey());
+
             }
 
 
@@ -96,7 +95,7 @@ TODO: usare un database per leggere la schedule
     }
 
     private void sendSignal(String type,String[] data){
-        String general = "http://"+allocatorFile.getProperty("hostname")+":"+allocatorFile.getProperty("port")+allocatorFile.getProperty("pre");
+        String general = "http://"+allocatorFile.getProperty("hostname")+":"+allocatorFile.getProperty("port")+apiFile.getProperty("pre");
         String commandSpecific = apiFile.getProperty(type);
         System.out.println(commandSpecific);
 
@@ -106,7 +105,9 @@ TODO: usare un database per leggere la schedule
         for(int i=0;i<data.length;i++){
             j.put("vmName",data[i]);
         }
-
+        try{
+        allocatorCall(general+j.toString());}
+        catch (IOException io){}
         System.out.println(j.toString());
 
 
@@ -114,7 +115,7 @@ TODO: usare un database per leggere la schedule
 
 
     private void allocatorCall(String url)throws IOException{
-
+        System.out.println(url);
         URL u = new URL(url);
         InputStream is = u.openStream();
 
