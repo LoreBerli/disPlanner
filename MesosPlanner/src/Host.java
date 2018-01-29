@@ -364,7 +364,7 @@ public class Host implements Receiver,Schedulable{
 
     public void saveSchedule() throws IOException{
         Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("scheduleLogs/"+this.ID+".txt"), "utf-8"));
+                new FileOutputStream("scheduleLogs/"+this.ID), "utf-8"));
         writer.write(this.currentSchedule.keySet().toString());
         try{
             writer.close();
@@ -377,7 +377,7 @@ public class Host implements Receiver,Schedulable{
 
     public void saveLoads() throws IOException{
         Writer writer = new BufferedWriter(new OutputStreamWriter(
-                new FileOutputStream("loadsLog/"+this.ID+"Loads.txt"), "utf-8"));
+                new FileOutputStream("loadsLog/"+this.ID+"Loads"), "utf-8"));
         if(this.currentSchedule.values().size()==0){
             return;}
         LocalDateTime min = Collections.min(this.currentSchedule.values(), new Comparator<LocalDateTime>() {

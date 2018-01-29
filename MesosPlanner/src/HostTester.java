@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HostTester {
-    //TODO: 3 nodi fisici , 8 VMs ,1000 processi
+
+
+
     public static void main(String[] args) throws IOException {
         //Physicals
         Logger lg=new Logger("\\logs");
@@ -40,6 +42,7 @@ public class HostTester {
         vm0.setReceiver(phy1);
         System.out.println("set to not move;:"+vm0.ID+ " from "+phy1.ID);
         ////////////////////////////////////////////
+        //Manager vm
         ScheduleManager vmManager = new ScheduleManager(vmPark);
 
         // Passo allo scheduler una lista di Jobs
@@ -51,6 +54,7 @@ public class HostTester {
 
 
         //////////////////////////////////////////
+        //Manager nodi fisici
         ScheduleManager machinesManager = new ScheduleManager(machines);
 
         machinesManager.setNewSchedule(vmPark);
@@ -66,16 +70,18 @@ public class HostTester {
             lg.logNodeInfo(m,"");
             m.saveSchedule();
             m.saveLoads();
-            deam.addRecevier(m,m.getCurrentSchedule());
+            deam.vMScan(m,m.getCurrentSchedule());
 
         }
 
-        deam.run();
+        //deam.run();
         for(Receiver m:vmPark){
             lg.logNodeInfo(m,"");
             m.saveSchedule();
             m.saveLoads();
+            deam.dockerScan(m,m.getCurrentSchedule());
         }
+        deam.run();
 
 
 
@@ -83,3 +89,5 @@ public class HostTester {
 
     }
 }
+
+

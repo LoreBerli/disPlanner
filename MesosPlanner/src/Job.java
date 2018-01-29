@@ -168,7 +168,7 @@ public class Job implements Schedulable{
 
     @Override
     public String toString() {
-        return this.tsk.getDescriptor()+" , "+ this.tStart.format(DateTimeFormatter.ISO_LOCAL_TIME) + " , " +this.getSecondsDuration()+";\n";
+        return this.tsk.getDescriptor()+" "+ this.tStart.format(DateTimeFormatter.ISO_LOCAL_TIME) + " " +this.getSecondsDuration()+"\n";
     }
 
     @Override

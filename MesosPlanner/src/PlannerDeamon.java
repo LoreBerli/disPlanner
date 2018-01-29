@@ -16,17 +16,27 @@ DONE: ricevere la schedule da ScheduleManager
 DONE: generare eventi ai t nella schedule
 TODO: usare le API dell'Allocator
 TODO: usare un database per leggere la schedule
+TODO: Vm e docker usano API differenti.Al momento supporto soltanto VM
+DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
  */
-    private Map<LocalDateTime,String> messageSchedule;
+
+    public enum NODETYPE{
+        VM,DOCKER,HOST
+    }
+
+
+
+    private Map<String[],LocalDateTime> messageSchedule;
     private boolean running;
     private Map<Receiver,Map<? extends Schedulable,LocalDateTime>> nodes;
-
+    private NODETYPE receiverType;
     Properties apiFile;
     Properties allocatorFile;
 
 
     public PlannerDeamon(){
         messageSchedule=new HashMap<>();
+        //this.receiverType=nd;
         nodes=new HashMap<>();
         running=true;
         apiFile=new Properties();
@@ -38,7 +48,7 @@ TODO: usare un database per leggere la schedule
         allocatorFile.load(alinp);
         }
         catch (IOException io){
-            System.out.println("opssss");
+            System.out.println("File .properties non trovati.");
         }
 
 
@@ -46,36 +56,23 @@ TODO: usare un database per leggere la schedule
 
     }
 
-    public void addRecevier(Receiver rec,Map<? extends Schedulable,LocalDateTime> sched){
-        nodes.put(rec,sched);
-        if(sched.size()>1){
-        messageSchedule.put(rec.getStartTime(),"POWER ON");
-        messageSchedule.put(rec.getEndTime(),"POWER OFF");}
 
-    }
-
-    public void printMessages(){
-        for(Map.Entry<LocalDateTime,String> em: messageSchedule.entrySet()){
-            System.out.println(em.getKey()+"    "+em.getValue());
-        }
-    }
 
     public void run(){
         //DONE: TESTARE il check sul tempo.
         sortSchedule();
-        Iterator<Map.Entry<LocalDateTime,String>> it=messageSchedule.entrySet().iterator();
+        Iterator<Map.Entry<String[],LocalDateTime>> it=messageSchedule.entrySet().iterator();
 
-        //DONE:sort sulle date. I messaggi non sono ordinati per tempo di invio.
-        Map.Entry<LocalDateTime,String> prossimo = it.next();
+        //DONE:sort sulle date. I messaggi ora  sono ordinati per tempo di invio.
+        Map.Entry<String[],LocalDateTime> prossimo = it.next();
         //System.out.println("Il primo parte a "+prossimo.getValue()+" "+prossimo.getKey());
         while(running && it.hasNext()){
-            //System.out.println("=== "+LocalDateTime.now()+"  "+prossimo.getKey()+" "+prossimo.getKey().isBefore(LocalDateTime.now()));
-//            if(prossimo.getKey().isAfter(LocalDateTime.now())){
-            if(LocalDateTime.now().isAfter(prossimo.getKey())){
 
-                System.out.println("======== "+prossimo.getValue()+"  "+prossimo.getKey());
+            if(LocalDateTime.now().isAfter(prossimo.getValue())){
+
+                System.out.println("======== "+prossimo.getValue()+"  "+prossimo.getKey()[0]+" "+prossimo.getKey()[1]);
                 String[] data = {"prova"};
-                sendSignal("VMON",data);
+                sendSignal(prossimo.getKey().toString(),data);//nope
                 prossimo=it.next();
 
             }
@@ -84,17 +81,36 @@ TODO: usare un database per leggere la schedule
         }
     }
 
+    public void vMScan(Receiver rec,Map<? extends Schedulable,LocalDateTime> sched){
+        nodes.put(rec,sched);
+        if(sched.size()>1){
+            messageSchedule.put(new String[]{"VMON",rec.getInfo()} ,rec.getStartTime().minusSeconds(10));
+            messageSchedule.put(new String[]{"VMOFF",rec.getInfo()} ,rec.getEndTime().plusSeconds(10));}
+
+    }
+    public void dockerScan(Receiver rec,Map<? extends Schedulable,LocalDateTime> sched){
+        nodes.put(rec,sched);
+        if(sched.size()>1){
+            //messageSchedule.put(rec.getStartTime(),"DOCKERSTART");
+            messageSchedule.put(new String[]{"DOCKERON",rec.getInfo()} ,rec.getStartTime());
+            messageSchedule.put(new String[]{"DOCKEROFF",rec.getInfo()} ,rec.getEndTime());}
+
+    }
     private void sortSchedule(){
 
-       messageSchedule = messageSchedule.entrySet().stream().sorted(Map.Entry.comparingByKey()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+       messageSchedule = messageSchedule.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                 (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-        for(Map.Entry<LocalDateTime,String> e: messageSchedule.entrySet()){
-            System.out.println(e.getKey()+" "+e.getValue());
+        for(Map.Entry<String[],LocalDateTime> e: messageSchedule.entrySet()){
+            System.out.println(e.getKey()[0]+" "+e.getKey()[1]+" "+e.getValue());
         }
 
     }
 
-    private void sendSignal(String type,String[] data){
+    private void sendSignal(String type,String[] keys,String[] data){
+        // docker richiede il json con la descrizione. Lo prendo dal db?
+
+        //questo si è rotto con l'aggiornamento FIXME
+
         String general = "http://"+allocatorFile.getProperty("hostname")+":"+allocatorFile.getProperty("port")+apiFile.getProperty("pre");
         String commandSpecific = apiFile.getProperty(type);
         System.out.println(commandSpecific);
@@ -103,7 +119,7 @@ TODO: usare un database per leggere la schedule
         int params=j.length();
         assert (params==data.length-1);
         for(int i=0;i<data.length;i++){
-            j.put("vmName",data[i]);
+            j.put(keys[i],data[i]);
         }
         try{
         allocatorCall(general+j.toString());}
