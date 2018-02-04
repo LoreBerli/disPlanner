@@ -104,6 +104,18 @@ public class ScheduleManager {
 //        return info;
 //    }
 
+    public void addHotJob(Schedulable j){
+//        for(Schedulable gh:this.toBeAllocated){
+//            gh.setSchedulability(false);
+//        }
+
+        List<Schedulable> newOne= new ArrayList<>();
+        newOne.add(j);
+        this.toBeAllocated=newOne;
+        allocateJobs();
+
+    }
+
     public void sortJobs(){
         this.checkSchedulability();
         this.toBeAllocated.sort(new Comparator<Schedulable>() {

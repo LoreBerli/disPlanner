@@ -22,6 +22,7 @@ public class Machine implements Receiver,Schedulable{
     private int usedDSK;
     private int internalTick;
     private float treshold;
+    private boolean reAllocable;
     private List<Job> inExecution;
     private Map<Job,LocalDateTime> currentSchedule;
     public String ID;
@@ -64,6 +65,10 @@ public class Machine implements Receiver,Schedulable{
         if(usedDSK<=totalDSK) {
             this.usedDSK = usedDSK;
         }
+    }
+
+    public void setSchedulability(boolean schedulable){
+        this.reAllocable=schedulable;
     }
 
     @Override

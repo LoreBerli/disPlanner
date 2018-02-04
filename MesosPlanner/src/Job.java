@@ -165,7 +165,9 @@ public class Job implements Schedulable{
     public void setStart(LocalDateTime tm){
         this.tStart=tm;
     }
-
+    public void setSchedulability(boolean schedulable){
+        this.reAllocable=schedulable;
+    }
     @Override
     public String toString() {
         return this.tsk.getDescriptor()+" "+ this.tStart.format(DateTimeFormatter.ISO_LOCAL_TIME) + " " +this.getSecondsDuration()+"\n";

@@ -19,8 +19,6 @@ public class binPacker {
         //vedi metriche di Fenzo, fa la stessa cosa
         Map<Receiver,Float[]> fits = new HashMap<>();
 
-
-
         for (Receiver m:park) {
             //per ogni macchina recupero lo scheduling corrente
             Map<Schedulable,LocalDateTime> mSchedule =new HashMap<>(m.getCurrentSchedule());

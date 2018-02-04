@@ -52,8 +52,25 @@ public class HostTester {
         vmManager.allocateJobs();
 
 
+        ////////////////////HOT ADD///////////////
+
+        // vmManager.addHotJob(j)
+        // dovrebbe :
+        // 1) Prendere la schedule allocata
+        // 2) Rendere ogni singolo job non-schedulable
+        // 3) Schedulare il nuovo job sotto i vincoli
+
+        //TEST HOT ADD
+        Task ta = new Task("spezial",1,200,3,60);
+
+        Job kl = new Job(ta,LocalDateTime.now().plusSeconds(3600),0,true,null);
+
+        System.out.println("#######HOT ADD######");
+        System.out.println(kl.getInfo());
+        vmManager.addHotJob(kl);
 
         //////////////////////////////////////////
+
         //Manager nodi fisici
         ScheduleManager machinesManager = new ScheduleManager(machines);
 

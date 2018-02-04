@@ -12,7 +12,7 @@ public interface Schedulable {
     public int getExpectedDUR();
     public int getExpectedDSK();
     void updateConsumption();
-
+    void setSchedulability(boolean schedulable);
     void setStart(LocalDateTime t);
     Task getTask();
     String getInfo();

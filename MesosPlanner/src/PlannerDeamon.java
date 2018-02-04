@@ -72,7 +72,7 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
 
                 System.out.println("======== "+prossimo.getValue()+"  "+prossimo.getKey()[0]+" "+prossimo.getKey()[1]);
                 String[] data = {"prova"};
-                sendSignal(prossimo.getKey().toString(),data);//nope
+                //sendSignal(prossimo.getKey().toString(),data);//nope
                 prossimo=it.next();
 
             }
