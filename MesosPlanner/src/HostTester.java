@@ -11,41 +11,49 @@ public class HostTester {
         //Physicals
         Logger lg=new Logger("\\logs");
         List<Host> machines=new ArrayList<>();
-        Host phy0 = new Host(8,8000,400,"phy0");
-        Host phy1 = new Host(8,8192,100,"phy1");
-        Host phy2 = new Host(12,12000,400,"phy2");
+        Host phy0 = new Host(8,8000,400,"phy0",0.9f);
+        Host phy1 = new Host(8,8192,100,"phy1",0.9f);
+        Host phy2 = new Host(12,12000,400,"phy2",0.9f);
         machines.add(phy0);
         machines.add(phy1);
         machines.add(phy2);
-        //VMs
+
+        //VMs////
         List<Host> vmPark=new ArrayList<>();
         for(int i=0;i<8;i++){
             Host tmp;
             if(i%2==0){
-            tmp=new Host(4,2048,100,"VM"+Integer.toString(i)+"high");}
+            tmp=new Host(4,2048,100,"VM"+Integer.toString(i)+"high",0.9f);}
             else{
-                tmp=new Host(2,1024,50,"VM"+Integer.toString(i)+"low");
+                tmp=new Host(2,1024,50,"VM"+Integer.toString(i)+"low",0.9f);
             }
             vmPark.add(tmp);
         }
-        //Jobs
+        ////////
+
+
+        //Jobs////////
         List<Job> jobs = TestingUtils.generateDummyJobs(300,60);
         ////////////////////////////////////////////
+
+        /////////CONSTRAINT TEST
         Task t = new Task("unmovable",2,200,20,120);
         Job j = new Job(t, LocalDateTime.now().plusSeconds(300),1,false,vmPark.get(1));
-        System.out.println("UNMOVABLE SU:"+j.getAssignedMachine().getInfo());
+        System.out.println("##### CONSTRAINT TEST: UNMOVABLE JOB ALLOCATO SU:"+j.getAssignedMachine().getInfo());
         jobs.add(j);
 
         Host vm0 = vmPark.get(1);
 
         vm0.setSchedulability(false);
         vm0.setReceiver(phy1);
-        System.out.println("set to not move;:"+vm0.ID+ " from "+phy1.ID);
+        System.out.println("##### CONSTRAINT TEST:"+vm0.ID+" set not to move from "+phy1.ID);
+
         ////////////////////////////////////////////
-        //Manager vm
+
+        //Manager vm//
         ScheduleManager vmManager = new ScheduleManager(vmPark);
 
-        // Passo allo scheduler una lista di Jobs
+        // Passo allo scheduler una lista di Jobs//
         vmManager.setNewSchedule(jobs);
 
         // Alloco i Jobs
@@ -54,35 +62,30 @@ public class HostTester {
 
         ////////////////////HOT ADD///////////////
 
-        // vmManager.addHotJob(j)
-        // dovrebbe :
-        // 1) Prendere la schedule allocata
-        // 2) Rendere ogni singolo job non-schedulable
-        // 3) Schedulare il nuovo job sotto i vincoli
-
-        //TEST HOT ADD
+        //////////////TEST HOT ADD
         Task ta = new Task("spezial",1,200,3,60);
 
         Job kl = new Job(ta,LocalDateTime.now().plusSeconds(3600),0,true,null);
 
-        System.out.println("#######HOT ADD######");
-        System.out.println(kl.getInfo());
+        System.out.println("####### HOT ADD");
+        System.out.println("####### HOT ADD: HOT JOB:"+kl.getInfo());
         vmManager.addHotJob(kl);
 
         //////////////////////////////////////////
 
         //Manager nodi fisici
+
         ScheduleManager machinesManager = new ScheduleManager(machines);
 
         machinesManager.setNewSchedule(vmPark);
 
         machinesManager.allocateJobs();
 
-        ////////////////////////////////////////
+        //////////////////////////////////////////
 
         PlannerDeamon deam = new PlannerDeamon();
 
-        //////////////////////////
+        //////////////////////////////////////////
         for(Receiver m:machines){
             lg.logNodeInfo(m,"");
             m.saveSchedule();
@@ -98,7 +101,7 @@ public class HostTester {
             m.saveLoads();
             deam.dockerScan(m,m.getCurrentSchedule());
         }
-        deam.run();
+        //deam.run();
 
 
 

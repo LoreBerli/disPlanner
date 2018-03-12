@@ -23,11 +23,11 @@ public class TestingUtils {
         return tasks;
     }
 
-    public static List<Machine> setUpPark(int mchins,boolean special){
-        List<Machine> park = new ArrayList<>();
+    public static List<Host> setUpPark(int mchins,boolean special){
+        List<Host> park = new ArrayList<>();
 
         for (int ms = 0; ms < mchins; ms++) {
-            Machine tmp = new Machine(4, 3000, 20,"mach"+ms);
+            Host tmp = new Host(4, 3000, 20,"TestMach"+ms,0.9f);
             tmp.setUsedCPU(ms%4);
             tmp.setUsedMEM((1000*ms)%3);
             tmp.setUsedDSK(14);
@@ -35,7 +35,7 @@ public class TestingUtils {
         }
 
         if(special){
-            Machine otherMachine = new Machine(4, 3000, 20,"special");
+            Host otherMachine = new Host(4, 3000, 20,"special",0.9f);
             otherMachine.setUsedCPU(0);
             otherMachine.setUsedMEM(0);
             otherMachine.setUsedDSK(4);

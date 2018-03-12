@@ -61,6 +61,7 @@ public class Job implements Schedulable{
      */
     private Receiver assignedMachine;
 
+
     public Job(Task tsk,LocalDateTime start,int priority,boolean reAllocable,Receiver m){
 
         this.tsk=tsk;
@@ -72,6 +73,7 @@ public class Job implements Schedulable{
         if(!reAllocable){assert this.assignedMachine!=null;}
         //System.out.println("EXPECTED DURATION INITIALIZED TO "+this.secondsDuration);
     }
+
 
     public Job(Task tsk,int start,int end,Machine m){
 

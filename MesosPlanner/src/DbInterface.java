@@ -11,6 +11,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Classe che offre i metodi per recuperare i descrittori di VM,Docker dal DB
+ *
+ */
 public class DbInterface {
 
     public Connection conn;
@@ -88,19 +92,19 @@ public class DbInterface {
         return t;
     }
 
-    public List<Machine> getRealMachines()throws java.sql.SQLException{
+    public List<Host> getRealMachines()throws java.sql.SQLException{
 
         Statement stmt = conn.createStatement() ;
         String query = "SELECT VM_NAME,AVG(NUM_CPU),AVG(TOTAL_MEMORY),AVG(FREE_DISK) FROM mach_test GROUP BY VM_NAME;" ;
         ResultSet rs = stmt.executeQuery(query) ;
-        System.out.println("-------------------------__"+rs.getFetchSize());
-        List<Machine> machines=new ArrayList<>();
+        System.out.println("------------------------- "+rs.getFetchSize());
+        List<Host> machines=new ArrayList<>();
         while (rs.next()) {
             int CPU = (int)Float.parseFloat(rs.getString("AVG(NUM_CPU)"));
             int MEM = (int)Float.parseFloat(rs.getString("AVG(TOTAL_MEMORY)"));
             int DSK = (int)(Float.parseFloat(rs.getString("AVG(FREE_DISK)")));
             String name = rs.getString("VM_NAME");
-            Machine tmp = new Machine(CPU,MEM,DSK,name);
+            Host tmp = new Host(CPU,MEM,DSK,name,0.9f);
             machines.add(tmp);
         }
         return machines;

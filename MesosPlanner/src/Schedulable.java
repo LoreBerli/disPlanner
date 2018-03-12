@@ -1,5 +1,9 @@
 import java.time.LocalDateTime;
 
+/**
+ * Interfaccia per qualsiasi cosa sia da schedulare (sia un Docker o una VM)
+ * Gli Schedulable saranno associati ad un Recevier
+ */
 public interface Schedulable {
     Receiver getRecevier();
 

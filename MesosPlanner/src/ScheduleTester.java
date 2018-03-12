@@ -24,17 +24,16 @@ public class ScheduleTester {
 
         DbInterface db = new DbInterface(pfile.getProperty("db"),pfile.getProperty("user"),pfile.getProperty("password"),pfile.getProperty("procs_table"));
 
-        //Task t = getOneFromDB(db);
-        //System.out.println(t);
         List<Job> jobs = TestingUtils.generateDummyJobs(700,20);
 
-        List<Machine> park;
+        List<Host> park;
         try{
-        park = db.getRealMachines();}
+        park = db.getRealMachines();
+        }
         catch (SQLException sql){
             System.out.println("nopeMACHINE");
             park = new ArrayList<>();
-            park.add(new Machine(4,32,400,"I should'nt be here"));
+            park.add(new Host(4,32,400,"I should'nt be here",0.9f));
         }
 
         park= park.subList(0,4);

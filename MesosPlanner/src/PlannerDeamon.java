@@ -25,7 +25,6 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
     }
 
 
-
     private Map<String[],LocalDateTime> messageSchedule;
     private boolean running;
     private Map<Receiver,Map<? extends Schedulable,LocalDateTime>> nodes;
@@ -33,7 +32,9 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
     Properties apiFile;
     Properties allocatorFile;
 
-
+    /**
+     * Demone che chiama le API dell'Allocator ai t specificati dallo ScheduleManager
+     */
     public PlannerDeamon(){
         messageSchedule=new HashMap<>();
         //this.receiverType=nd;
@@ -42,13 +43,13 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
         apiFile=new Properties();
         allocatorFile=new Properties();
         try{
-        InputStream apinp = new FileInputStream("src/apis.properties");
-        InputStream alinp = new FileInputStream("src/allocator.properties");
+        InputStream apinp = new FileInputStream("apis.properties");
+        InputStream alinp = new FileInputStream("allocator.properties");
         apiFile.load(apinp);
         allocatorFile.load(alinp);
         }
         catch (IOException io){
-            System.out.println("File .properties non trovati.");
+            System.out.println("####DEAMON PLANNER File .properties non trovati.");
         }
 
 
@@ -70,7 +71,7 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
 
             if(LocalDateTime.now().isAfter(prossimo.getValue())){
 
-                System.out.println("======== "+prossimo.getValue()+"  "+prossimo.getKey()[0]+" "+prossimo.getKey()[1]);
+                System.out.println("###DEAMON PLANNER - SIGNAL "+prossimo.getValue()+"  "+prossimo.getKey()[0]+" "+prossimo.getKey()[1]);
                 String[] data = {"prova"};
                 //sendSignal(prossimo.getKey().toString(),data);//nope
                 prossimo=it.next();
@@ -101,7 +102,7 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
        messageSchedule = messageSchedule.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
                 (oldValue, newValue) -> oldValue, LinkedHashMap::new));
         for(Map.Entry<String[],LocalDateTime> e: messageSchedule.entrySet()){
-            System.out.println(e.getKey()[0]+" "+e.getKey()[1]+" "+e.getValue());
+            //System.out.println("###DEAMON PLANNER "+e.getKey()[0]+" "+e.getKey()[1]+" "+e.getValue());
         }
 
     }
@@ -135,15 +136,6 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
         URL u = new URL(url);
         InputStream is = u.openStream();
 
-
-
-
     }
-//    private LocalDateTime findEarliestStartTime(Map<Schedulable,LocalDateTime> sched){
-//        return
-//    }
-//
-//    private LocalDateTime findLatestEndTime(Map<Schedulable,LocalDateTime> sched){
-//
-//    }
+
 }

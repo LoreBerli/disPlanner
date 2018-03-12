@@ -116,6 +116,9 @@ public class Machine implements Receiver,Schedulable{
 //
 //    }
 
+    public float getTreshold(){
+        return this.treshold;
+    }
     /**
      *Per ogni JOB controllo al tempo di start del Job il carico sulla macchina
      */

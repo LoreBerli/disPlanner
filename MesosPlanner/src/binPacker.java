@@ -10,10 +10,10 @@ import java.util.*;
  */
 public class binPacker {
     /**
-     * Dati una lista di {@link Machine} ed un {@link Job} seleziona la macchina ottimale per l'esecuzione del {@link Job}
+     * Dati una lista di {@link Receiver} ed un {@link Schedulable} seleziona l'Host ottimale per l'esecuzione dello {@link Schedulable}
      * @param toBeScheduled
      * @param park
-     * @return {@link Machine}
+     * @return {@link Receiver}
      */
     static public  Receiver findOptimum(Schedulable toBeScheduled,List<? extends Receiver> park){
         //vedi metriche di Fenzo, fa la stessa cosa
@@ -46,7 +46,7 @@ public class binPacker {
 //                    bestMachines[k] = e.getKey();
 //                    bestValues[k] = rez[k];
 //                }
-                if (rez[k] >bestValues[k] && rez[k] < 0.9f) {
+                if (rez[k] >bestValues[k] && rez[k] < e.getKey().getTreshold()) {
                     bestMachines[k] = e.getKey();
                     bestValues[k] = rez[k];
                 }
@@ -56,10 +56,10 @@ public class binPacker {
         float best=Float.MAX_VALUE;
         Receiver bst= null;
         for(int f=0;f<3;f++){
-            //TODO: qui c'è il baho.
+            //TODO: qui c'è il baho.(c'era?)
             if(bestMachines[f]!=null) {
-                if (bestValues[f] < best && fits.get(bestMachines[f])[0] < 0.9 && fits.get(bestMachines[f])[1] < 0.9 && fits.get(bestMachines[f])[2] < 0.9) {
-                    //System.out.println("====> " + bestValues[f] + "(" + bestValues[0] + "," + bestValues[1] + "," + bestValues[2] + ")"+ bestMachines[f].getInfo());
+                if (bestValues[f] < best && fits.get(bestMachines[f])[0] < 0.9f && fits.get(bestMachines[f])[1] < 0.9f && fits.get(bestMachines[f])[2] < 0.9f) {
+                    //System.out.println("####BINPACKER ====> " + bestValues[f] + "(" + bestValues[0] + "," + bestValues[1] + "," + bestValues[2] + ")"+ bestMachines[f].getInfo());
                     best = bestValues[f];
                     bst = bestMachines[f];
                 }
@@ -78,7 +78,7 @@ public class binPacker {
 
 
         if(bst==null){
-            System.out.println("No suitable node found - Changing JOB:"+ toBeScheduled.toString() +" StartTime");
+            System.out.println("###BINPACKER No suitable Receiver found - Changing Schedulable:"+ toBeScheduled.toString() +" StartTime");
             //System.out.println(fits.toString());
             return null;
         }

@@ -74,6 +74,10 @@ public class Host implements Receiver,Schedulable{
         }
     }
 
+    public float getTreshold(){
+        return this.treshold;
+    }
+
     @Override
     public Receiver getRecevier() {
         return this.assignedMachine;
@@ -90,16 +94,16 @@ public class Host implements Receiver,Schedulable{
         if(usedMEM<=totalMEM){
         this.usedMEM = usedMEM;}
     }
-    public Host(int CPU, int MEM, int DSK, String name){
+    public Host(int CPU, int MEM, int DSK, String name,float tresh){
         this.ID=name;
         this.internalTick=0;
         this.totalCPU=CPU;
         this.totalMEM=MEM;
         this.totalDSK=DSK;
-        this.treshold=0.9f;
+        this.treshold=tresh;
         this.inExecution=new ArrayList<Schedulable>();
         this.currentSchedule=new HashMap<>();
-        System.out.println("CREATA_ "+this.getInfo());
+        System.out.println("###HOST "+this.ID+" CREATA_ "+this.getInfo());
     }
 //    private boolean checkForAcceptance(Job j){
 //        //Controlla se la richiesta di risorse è fisicamente possibile
@@ -147,8 +151,8 @@ public class Host implements Receiver,Schedulable{
         for(int j=0;j<loads.length;j++){
             for(int k =0;k<3;k++) {
                 if (loads[j][k]> this.treshold) {
-                    System.out.println("fallito per il job:" + j + "-esimo:"+" => "+loads[j][k]);
-                    System.out.println(proposedSchedule);
+                    System.out.println("###HOST " + this.ID + " fallito per il job:" + j + "-esimo:"+" => "+loads[j][0] +" - "+loads[j][1]+"- "+loads[j][2]);
+                    System.out.println("###HOST " + proposedSchedule);
                     return false;
                 }
             }
@@ -193,11 +197,11 @@ public class Host implements Receiver,Schedulable{
         proposedSchedule.put(j,j.getStartTime()); //ci aggiungo il job
         if(checkSchedule(proposedSchedule)){ //testo se la schedule nuova proposta funziona
             this.currentSchedule.put(j,j.getStartTime());
-            System.out.println("Ho allocato con successo " +j.getInfo()+" su "+this.ID);
+            //System.out.println("Ho allocato con successo " +j.getInfo()+" su "+this.ID);
             updateAverageResDuringCurrentSchedule();
             return true;
         }
-        System.out.println("Ho fallito nell'allocare un job su "+this.ID);
+        //System.out.println("Ho fallito nell'allocare un job su "+this.ID);
         return false;
     }
 
@@ -301,8 +305,8 @@ public class Host implements Receiver,Schedulable{
         this.expectedRAM=(int)Math.ceil(this.totalMEM*avg[1]);
         avg[2]=avg[2]/(float)loads.length;
         this.expextedDSK=(int)Math.ceil(this.totalDSK*avg[2]);
-        //System.out.println("ofFsake: "+avg[0]+"-"+avg[1]+"-"+avg[2]);
-        //System.out.println("ofFsake: "+this.expectedCPU+"-"+this.expectedRAM+"-"+this.expextedDSK);
+        //System.out.println("offFsake: "+avg[0]+"-"+avg[1]+"-"+avg[2]);
+        //System.out.println("offFsake: "+this.expectedCPU+"-"+this.expectedRAM+"-"+this.expextedDSK);
         return avg;
     }
 
@@ -392,11 +396,12 @@ public class Host implements Receiver,Schedulable{
                 return localDateTime.isAfter(t1)? 1:-1;
             }
         });
-        System.out.println(min);
-        System.out.println(max);
-        System.out.println(this.getEndTime());
+        System.out.println("");
+        System.out.println("###HOST " + this.ID+" ha come   startTime:"+min);
+        System.out.println("###HOST " + this.ID+" ha come lastJobTime:"+max);
+        System.out.println("###HOST " + this.ID+" ha come     endTime:"+this.getEndTime());
         this.updateAverageResDuringCurrentSchedule();
-        System.out.println("--------"+this.ID+" "+this.currentSchedule.size());
+        System.out.println("###HOST " + this.ID+" ha n:"+this.currentSchedule.size()+" schedulables allocati.");
         //writer.write("--------"+this.ID+" "+this.currentSchedule.size()+"\n");
         for(LocalDateTime start=min.minusSeconds(20);start.isBefore(this.getEndTime());start=start.plusSeconds(20)){
             float[] res = this.checkNormalizedResAtTime(start);
