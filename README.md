@@ -16,3 +16,5 @@ VMX sono macchine virtuali
 
 
 ![esempio vis](example.png)
+
+[Documentazione](doc/doc.md)
