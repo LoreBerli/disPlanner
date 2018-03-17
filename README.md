@@ -1,3 +1,7 @@
+# Docs
+
+[Documentazione](doc/doc.md)
+
 # TODO: #
 ---
 * <del>errore LF>1.0</del> DONE
@@ -16,5 +20,3 @@ VMX sono macchine virtuali
 
 
 ![esempio vis](example.png)
-
-[Documentazione](doc/doc.md)
