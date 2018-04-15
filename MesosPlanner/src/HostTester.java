@@ -101,7 +101,7 @@ public class HostTester {
             m.saveLoads();
             deam.dockerScan(m,m.getCurrentSchedule());
         }
-        //deam.run();
+        deam.run();
 
 
 

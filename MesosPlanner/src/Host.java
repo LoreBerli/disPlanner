@@ -17,22 +17,24 @@ public class Host implements Receiver,Schedulable{
 
      */
 
-    private int totalCPU;
-    private int totalMEM;
-    private int totalDSK;
-    private int usedCPU;
-    private int usedMEM;
-    private int usedDSK;
-    private boolean isSchedulable=true;
-    private int expectedCPU;
-    private int expectedRAM;
-    private int expextedDSK;
-    private Receiver assignedMachine;
+    private int totalCPU;       //CPU TOTALI
+    private int totalMEM;       //RAM TOTALE
+    private int totalDSK;       //DISCO TOTALE
+    private int usedCPU;        //CPU UTILIZZATA
+    private int usedMEM;        //MEMORIA UTILIZZATA
+    private int usedDSK;        //DISCO UTILIZZATO
+    private boolean isSchedulable=true;     //Se false lo scheduler lo ignora e l'assegnazione dovrà essere fatta manualmente
+    private int expectedCPU;    //valore medio CPU atteso dati i job in coda
+    private int expectedRAM;    //valore medio RAM atteso dati i job in coda
+    private int expextedDSK;    //valore medio DISCO atteso dati i job in coda
+    private Receiver assignedMachine;//Macchina a cui è assegnata l'host.
     private int internalTick;
-    private float treshold;
-    private List<Schedulable> inExecution;
-    private Map<Schedulable,LocalDateTime> currentSchedule;
-    public String ID;
+    private float treshold;//SOGLIA massima di utilizzo risorse
+    private List<Schedulable> inExecution;//Lista di Schedulable allocati sulla macchina
+    private Map<Schedulable,LocalDateTime> currentSchedule;//Mappa di Schedulable,StartTime allocati
+    public String ID;//ID dell'Host
+
+
     public int getTotalCPU(){
         return totalCPU;
     }
@@ -131,7 +133,9 @@ public class Host implements Receiver,Schedulable{
 //    }
 
     /**
-     *Per ogni JOB controllo al tempo di start del Job il carico sulla macchina
+     * Data una Mappa(Schedulable,StartTime) controllo che l'utilizzo delle risorse rimanga sotto la soglia
+     * Per ogni JOB controllo al tempo di start del Job il carico sulla macchina.
+     *
      */
     public boolean checkSchedule(Map<Schedulable,LocalDateTime> proposedSchedule){
 
@@ -237,6 +241,7 @@ public class Host implements Receiver,Schedulable{
         return new ArrayList<>();
     }
     /**
+     * Data una schedule(Mappa(Schedulable,StartTime)) ed un istante di tempo t ritorna il carico medio(CPU+RAM+DSK)/3 sulla macchina
      * Ritorna un float tra 0.0 e 1.0 con il "carico" eventuale al tempo con la currentSchedule
      */
     public float checkLoadAtTime(LocalDateTime t,Map<Schedulable,LocalDateTime> proposedSchedule){

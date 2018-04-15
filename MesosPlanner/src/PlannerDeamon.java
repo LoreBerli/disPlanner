@@ -51,10 +51,6 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
         catch (IOException io){
             System.out.println("####DEAMON PLANNER File .properties non trovati.");
         }
-
-
-
-
     }
 
 
@@ -68,20 +64,19 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
         Map.Entry<String[],LocalDateTime> prossimo = it.next();
         //System.out.println("Il primo parte a "+prossimo.getValue()+" "+prossimo.getKey());
         while(running && it.hasNext()){
-
             if(LocalDateTime.now().isAfter(prossimo.getValue())){
-
-                System.out.println("###DEAMON PLANNER - SIGNAL "+prossimo.getValue()+"  "+prossimo.getKey()[0]+" "+prossimo.getKey()[1]);
+                System.out.println("###DEAMON PLANNER - SIGNAL "+prossimo.getValue()+" -"+prossimo.getKey()[0]+"- "+prossimo.getKey()[1]);
                 String[] data = {"prova"};
-                //sendSignal(prossimo.getKey().toString(),data);//nope
+                sendSignal(prossimo.getKey()[0].toString(),data);//nope
                 prossimo=it.next();
-
             }
-
-
         }
     }
 
+    /**
+     * Generates VMON and VMOFF signals according to schedule start and end times.
+     *
+     */
     public void vMScan(Receiver rec,Map<? extends Schedulable,LocalDateTime> sched){
         nodes.put(rec,sched);
         if(sched.size()>1){
@@ -89,14 +84,20 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
             messageSchedule.put(new String[]{"VMOFF",rec.getInfo()} ,rec.getEndTime().plusSeconds(10));}
 
     }
+
+    /**
+     * Generates DOCKERON and DOCKEROFF signals according to schedule start and end times
+     * @param rec
+     * @param sched
+     */
     public void dockerScan(Receiver rec,Map<? extends Schedulable,LocalDateTime> sched){
         nodes.put(rec,sched);
         if(sched.size()>1){
             //messageSchedule.put(rec.getStartTime(),"DOCKERSTART");
             messageSchedule.put(new String[]{"DOCKERON",rec.getInfo()} ,rec.getStartTime());
             messageSchedule.put(new String[]{"DOCKEROFF",rec.getInfo()} ,rec.getEndTime());}
-
     }
+
     private void sortSchedule(){
 
        messageSchedule = messageSchedule.entrySet().stream().sorted(Map.Entry.comparingByValue()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
@@ -107,27 +108,34 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
 
     }
 
-    private void sendSignal(String type,String[] keys,String[] data){
-        // docker richiede il json con la descrizione. Lo prendo dal db?
+    /**
+     * Riceve una stringa con il codice del messaggio : VMON VMOFF VMSHUTDOWN DOCKERON DOCKEROFF
+     * e una con i dati
+     */
 
+    private void sendSignal(String type,String[] data){
+        // docker richiede il json con la descrizione. Lo prendo dal db?
+        //cos'è keys???????
+        //
+        //
         //questo si è rotto con l'aggiornamento FIXME
 
         String general = "http://"+allocatorFile.getProperty("hostname")+":"+allocatorFile.getProperty("port")+apiFile.getProperty("pre");
+        System.out.println(type);
         String commandSpecific = apiFile.getProperty(type);
+
         System.out.println(commandSpecific);
 
         JSONObject j= new JSONObject(commandSpecific);
         int params=j.length();
         assert (params==data.length-1);
         for(int i=0;i<data.length;i++){
-            j.put(keys[i],data[i]);
+            j.put(j.keys().next(),data[i]);
         }
         try{
         allocatorCall(general+j.toString());}
         catch (IOException io){}
         System.out.println(j.toString());
-
-
     }
 
 
@@ -135,6 +143,7 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
         System.out.println(url);
         URL u = new URL(url);
         InputStream is = u.openStream();
+
 
     }
 
