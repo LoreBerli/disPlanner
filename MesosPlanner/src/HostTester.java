@@ -33,7 +33,7 @@ public class HostTester {
 
 
         //Jobs////////
-        List<Job> jobs = TestingUtils.generateDummyJobs(300,60);
+        List<Job> jobs = TestingUtils.generateDummyJobs(600,60);
         ////////////////////////////////////////////
 
         /////////CONSTRAINT TEST

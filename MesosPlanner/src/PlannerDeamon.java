@@ -4,6 +4,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -139,10 +140,13 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
     }
 
 
-    private void allocatorCall(String url)throws IOException{
+    private int allocatorCall(String url)throws IOException{
         System.out.println(url);
         URL u = new URL(url);
-        InputStream is = u.openStream();
+        HttpURLConnection con = (HttpURLConnection) u.openConnection();
+        con.setRequestMethod("GET");
+        con.setRequestProperty("User-Agent", "CIAONE");
+        return con.getResponseCode();
 
 
     }
