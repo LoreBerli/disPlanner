@@ -24,6 +24,9 @@ def open_csv(f_path):
     return data
 
 def drawLoad(loads,name,min_time=None):
+
+    #non usato
+    
     if(len(loads)<1):
         return
     im = Image.new("RGB",(1200,400),color=(255,255,255))

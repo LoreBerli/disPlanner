@@ -15,9 +15,9 @@ public class PlannerDeamon extends Thread {
 Problema: ScheduleManager alloca degli Schedulable su dei Receiver, non crea una vera schedule dei processi.
 DONE: ricevere la schedule da ScheduleManager
 DONE: generare eventi ai t nella schedule
-TODO: usare le API dell'Allocator
+DONE: usare le API dell'Allocator
 TODO: usare un database per leggere la schedule
-TODO: Vm e docker usano API differenti.Al momento supporto soltanto VM
+DONE: vm AND docker apis
 DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
  */
 
@@ -134,6 +134,7 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
             j.put(j.keys().next(),data[i]);
         }
         try{
+            all("id");
         allocatorCall(general+j.toString());}
         catch (IOException io){}
         System.out.println(j.toString());
@@ -149,6 +150,19 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
         return con.getResponseCode();
 
 
+
     }
+
+    private int all(String id)throws IOException{//TODO gestire sta cosa
+
+        String[] cmd = {
+                "/bin/bash",
+                "python3 /home/cioni/PycharmProjects/dockerHandler.py hello-world"
+        };
+        System.out.println(Runtime.getRuntime().exec(cmd));
+        return 0;
+    }
+
+
 
 }
