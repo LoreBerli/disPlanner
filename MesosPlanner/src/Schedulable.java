@@ -20,4 +20,6 @@ public interface Schedulable {
     void setStart(LocalDateTime t);
     Task getTask();
     String getInfo();
+    String getID();
+
 }

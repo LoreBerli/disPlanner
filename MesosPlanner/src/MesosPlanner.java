@@ -28,7 +28,7 @@ public class MesosPlanner {
         List<Job> jobs=new ArrayList<>();
         if(!test) {
             /// Interfaccia Database
-            DbInterface db = new DbInterface(properties.getProperty("db"),properties.getProperty("user"),properties.getProperty("password"),properties.getProperty("procs_table"));
+            DbInterface db = new DbInterface(properties.getProperty("db"),properties.getProperty("user"),properties.getProperty("password"),properties.getProperty("procs_table"),properties.getProperty("sched_table"));
             try {
                 park = db.getRealMachines();
                 //COME SI TROVANO I JOBS??
@@ -40,11 +40,12 @@ public class MesosPlanner {
             } catch (SQLException sql) {
             }
 
-        }else{
-            park=TestingUtils.setUpPark(5,false);
-            jobs= TestingUtils.generateDummyJobs(200,50);
-
         }
+//        else{
+//            park=TestingUtils.setUpPark(5,false,);
+//            jobs= TestingUtils.generateDummyJobs(200,50);
+//
+//        }
         /// Schedule Manager
         ScheduleManager scheduleManager = new ScheduleManager(park);
 

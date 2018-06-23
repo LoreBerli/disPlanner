@@ -1,15 +1,12 @@
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
 import org.json.*;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
+import java.io.*;
+import java.net.*;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.net.URL;
 import java.util.stream.Collectors;
+
 public class PlannerDeamon extends Thread {
 /*
 Problema: ScheduleManager alloca degli Schedulable su dei Receiver, non crea una vera schedule dei processi.
@@ -24,7 +21,6 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
     public enum NODETYPE{
         VM,DOCKER,HOST
     }
-
 
     private Map<String[],LocalDateTime> messageSchedule;
     private boolean running;
@@ -43,6 +39,7 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
         running=true;
         apiFile=new Properties();
         allocatorFile=new Properties();
+
         try{
         InputStream apinp = new FileInputStream("apis.properties");
         InputStream alinp = new FileInputStream("allocator.properties");
@@ -52,6 +49,7 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
         catch (IOException io){
             System.out.println("####DEAMON PLANNER File .properties non trovati.");
         }
+
     }
 
 
@@ -66,9 +64,15 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
         //System.out.println("Il primo parte a "+prossimo.getValue()+" "+prossimo.getKey());
         while(running && it.hasNext()){
             if(LocalDateTime.now().isAfter(prossimo.getValue())){
-                System.out.println("###DEAMON PLANNER - SIGNAL "+prossimo.getValue()+" -"+prossimo.getKey()[0]+"- "+prossimo.getKey()[1]);
-                String[] data = {"prova"};
-                sendSignal(prossimo.getKey()[0].toString(),data);//nope
+                //System.out.println("###DEAMON PLANNER - SIGNAL "+prossimo.getValue()+" -"+prossimo.getKey()[0]+"- "+prossimo.getKey()[1]);
+                String[] data = prossimo.getKey();
+                //sendSignal(prossimo.getKey()[0].toString(),data);
+                try{
+
+                sendSignalToPython(data);}//QUI SI FA
+                catch (IOException io){
+                    System.out.println("DEAMON NO SOCKET");
+                }
                 prossimo=it.next();
             }
         }
@@ -140,6 +144,42 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
         System.out.println(j.toString());
     }
 
+    private void sendSignalToPython(String[] data) throws IOException
+    {
+        Socket socket = new Socket("localhost", 8082);
+        BufferedReader stdIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+        String[] splitted = data[1].split(" ");
+        ArrayList<String> total = new ArrayList<String>();
+        total.add(data[0]);
+        total.add(data[1]);
+
+        String commandSpecific = apiFile.getProperty(data[0]);
+
+        for(String s :splitted){
+            System.out.println(s);
+            total.add(s);
+
+        }
+
+
+        JSONObject j= new JSONObject();
+        j.put("type",data[0]);
+        int params=j.length();
+        assert (params==data.length-1);
+        for(String s :splitted){
+            String[] splits = s.split(";");
+            for(String sl : splits){
+            System.out.println(sl);}
+            j.put(splits[0],splits[1]);
+        }
+        out.println(j.toString());
+        //this.out.write(j.toString());
+        //this.out.flush();
+        System.out.println("TO PYT:");
+        System.out.println(j.toString());
+    }
+
 
     private int allocatorCall(String url)throws IOException{
         System.out.println(url);
@@ -148,10 +188,9 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
         con.setRequestMethod("GET");
         con.setRequestProperty("User-Agent", "CIAONE");
         return con.getResponseCode();
-
-
-
     }
+
+
 
     private int all(String id)throws IOException{//TODO gestire sta cosa
 

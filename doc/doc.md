@@ -2,7 +2,7 @@
 # Scheduler
 ---
 L'applicativo java svolge il ruolo di scheduler, raccogliendo da un DB descrittori di processi e macchine virtuali per poi fornire in output uno **scheduling**, ovvero una lista di processi associati ad un tempo di start ed una macchina su cui eseguire.
-Opzionalmente una volta trovata l'allocazione ottimale, fornisce un servizio *deamon* che genera chiamate API all'Allocator ad i tempi specificati nella schedule con il comando relativo.
+Opzionalmente una volta trovata l'allocazione ottimale, fornisce un servizio *deamon* che genera chiamate API al dockerHandler ad i tempi specificati nella schedule con il comando relativo.
 
 ---
 **e.g**
@@ -32,11 +32,11 @@ Nell'archivio *scheduler.tar* sono inclusi :
 Lanciando install.sh verranno creati dei file di configurazione: apis.properties, config.properties,allocator.properties.
 
 ### apis.properties
-Contiene info su le API dell'Allocator.
+Contiene info su le API del dockerHandler.
 ### config.properties
 Contiene info sul database e sui path dove salvare gli output
 ### allocator.properties
-Contiene info sull'allocator
+Contiene info sul dockerHandler
 ```
 hostname="hostname"
 port=8080
@@ -234,7 +234,7 @@ In questo caso il sistema rischedula l'intero insieme di Jobs, ovvero quelli gi�
 
 ## Deamon
 Il Deamon gira come thread separato dal resto.
-Recupera la schedule generata dal Manager e comunica con l'Allocator tramite le apposite API.
+Recupera la schedule generata dal Manager e comunica col dockerHandler tramite le apposite API.
 Al momento l'unico modo con cui ciò avviene è tramite il flow esposto nel sequence diagram, ma è facilmente implementabile una soluzione dove il Deamon possa essere chiamato separatamente recuperando una schedule generata precedentemente da un DB o da un file.
 
 ```
@@ -259,3 +259,8 @@ for(Receiver m:vmPark){
 }
 deam.run();
 ```
+### dockerHandler
+Componente python che svolge il ruolo di interfaccia fra il sistema e docker.
+dockerHandler(server) riceve via socket dal PlannerDeamon(client) i segnali di DOCKERON,DOCKEROFF,... e chiama le API Docker corrispondenti.
+
+[grafico UML]

@@ -1,6 +1,7 @@
 import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
 import javax.swing.plaf.synth.SynthEditorPaneUI;
 import java.io.*;
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.Period;
@@ -55,6 +56,10 @@ public class Machine implements Receiver,Schedulable{
             this.usedCPU = usedCPU;
         }
 
+    }
+
+    public String getID(){
+        return this.ID;
     }
 
     public Map<Job ,LocalDateTime> getCurrentSchedule(){
@@ -168,6 +173,13 @@ public class Machine implements Receiver,Schedulable{
     public String state(){
         //TODO forse un Override di ToString ????
         return this.ID+"  -:CPU:"+this.getUsedCPU()+" MEM:"+this.getUsedMEM()+" DSK:"+this.getTotalDSK();
+    }
+
+    public void saveScheduleToDB() throws IOException,SQLException {
+        //this.(this.getStartTime().plusSeconds(offset));
+        return;
+
+
     }
 
     public boolean queueJob(Schedulable sj){

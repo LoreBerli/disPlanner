@@ -41,7 +41,9 @@ public class Job implements Schedulable{
     private Task tsk;
     private boolean reAllocable;
     private int priority;
-
+    public String getID(){
+        return this.tsk.getDescriptor();
+    }
     /**
      * tempo di inizio del {@link Job}
      */

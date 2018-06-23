@@ -1,4 +1,5 @@
 import java.io.IOException;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -16,6 +17,7 @@ public interface Receiver {
     String getInfo();
     void saveSchedule() throws IOException;
     void saveLoads()throws IOException;
+    void saveScheduleToDB() throws IOException,SQLException;
     float[] checkNormalizedResAtTime(LocalDateTime t,Map< ? extends Schedulable, LocalDateTime> proposedSchedule);
     float[] checkNormalizedResAtTime(LocalDateTime t);
     float checkLoadAtTime(LocalDateTime t);

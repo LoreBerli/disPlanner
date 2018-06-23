@@ -1,4 +1,5 @@
 import java.io.*;
+import java.sql.SQLException;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -16,7 +17,7 @@ public class Host implements Receiver,Schedulable{
     TODO: IMPLEMENTARE getTask();
 
      */
-
+    public DbInterface db;
     private int totalCPU;       //CPU TOTALI
     private int totalMEM;       //RAM TOTALE
     private int totalDSK;       //DISCO TOTALE
@@ -96,7 +97,8 @@ public class Host implements Receiver,Schedulable{
         if(usedMEM<=totalMEM){
         this.usedMEM = usedMEM;}
     }
-    public Host(int CPU, int MEM, int DSK, String name,float tresh){
+    public Host(int CPU, int MEM, int DSK, String name,float tresh,DbInterface db){
+        this.db=db;
         this.ID=name;
         this.internalTick=0;
         this.totalCPU=CPU;
@@ -382,6 +384,15 @@ public class Host implements Receiver,Schedulable{
 
     }
 
+    public void saveScheduleToDB() throws IOException,SQLException{
+        //this.(this.getStartTime().plusSeconds(offset));
+        for(Map.Entry<Schedulable,LocalDateTime> entry:this.currentSchedule.entrySet()){
+            db.writeScheduleToDb(entry.getKey().getID(),"ls",entry.getValue(),entry.getKey().getEndTime(),entry.getKey().getExpectedMEM(),entry.getKey().getExpectedDSK(),entry.getKey().getExpectedCPU(),entry.getKey().getExpectedDUR(),this.ID);
+        }
+
+
+    }
+
 
 
     public void saveLoads() throws IOException{
@@ -423,17 +434,21 @@ public class Host implements Receiver,Schedulable{
     public String toString(){
         return getInfo();
     }
+    public String getID(){
+        return this.ID;
+    }
     public String getInfo(){
         this.updateAverageResDuringCurrentSchedule();
-        String info=this.ID;
-        info+=" CPU:"+this.getTotalCPU();
-        info+=" MEM:"+this.getTotalMEM();
-        info+=" DSK:"+this.getTotalDSK();
-        info+=" schedule_size:"+this.currentSchedule.size();
-        info+=" average_load:"+this.averageLoadDuringCurrentSchedule();
+        String info="id;"+this.ID;
+        info+=" CPU;"+this.getTotalCPU();
+        info+=" MEM;"+this.getTotalMEM();
+        info+=" DSK;"+this.getTotalDSK();
+        info+=" schedule_size;"+this.currentSchedule.size();
+        info+=" average_load;"+this.averageLoadDuringCurrentSchedule();
         if(this.currentSchedule.size()>0) {
-            info += " startTime:" + this.getStartTime().toString();
-            info += " endTime:" + this.getEndTime().toString();
+            info += " startTime;" + this.getStartTime().toString();
+            info += " endTime;" + this.getEndTime().toString();
+            info += " duration;" + this.getExpectedDUR();
         }
         //info+="\n";
         return info;

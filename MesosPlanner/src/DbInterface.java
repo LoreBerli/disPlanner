@@ -7,6 +7,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,14 +24,16 @@ public class DbInterface {
     private String user;
     private String pw;
     private String docks;
+
     private String scheduleTable;
 
 
-    public DbInterface(String db,String user,String pw,String procs){
+    public DbInterface(String db,String user,String pw,String procs,String scheduleTable){
         try
         {
             this.db=db;
             this.user=user;
+            this.scheduleTable=scheduleTable;
             this.pw=pw;
             this.docks=procs;
             Class.forName("com.mysql.jdbc.Driver");
@@ -38,10 +42,11 @@ public class DbInterface {
 
             //Database Name - testDB, Username - "root", Password - ""
             System.out.println("Connected...");
-            this.queryTest();
+
         }
         catch(Exception e)
         {
+            System.out.println("FUUUUUUUUUUUCK");
             e.printStackTrace();
         }
     }
@@ -104,18 +109,43 @@ public class DbInterface {
             int MEM = (int)Float.parseFloat(rs.getString("AVG(TOTAL_MEMORY)"));
             int DSK = (int)(Float.parseFloat(rs.getString("AVG(FREE_DISK)")));
             String name = rs.getString("VM_NAME");
-            Host tmp = new Host(CPU,MEM,DSK,name,0.9f);
+            Host tmp = new Host(CPU,MEM,DSK,name,0.9f,this);
             machines.add(tmp);
         }
         return machines;
     }
+    public void cleanDB()throws SQLException{
+        //TRUNCATE TABLE
+        Statement stmt = conn.createStatement();
+        stmt.execute("TRUNCATE TABLE "+this.scheduleTable+";");
+
+    }
 
     //
-    public boolean writeScheduleToDb() throws java.sql.SQLException{
-        Statement stmt = conn.createStatement();
-        String query="INSERT INTO "+this.scheduleTable+" VALUES(";
+    public boolean writeScheduleToDb(String name, String command, LocalDateTime startTime,LocalDateTime endTime,int CPU,int MEM,int DSK,int duration,String host) throws java.sql.SQLException{
+        // id | name | command | startTime | endTime |CPU|MEM|DSK host
+        //datetime 'YYYY-MM-DD HH:MM:SS'
+        //
+        //  CREATE TABLE new_sched (id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        //                          name VARCHAR(30),command VARCHAR(60),startTime DATETIME,
+        //                          endTime DATETIME,cpu INT,mem INT,dsk INT,duration INT,host VARCHAR(30));
+        //  INSERT INTO new_sched VALUE(0,
+        //                         "docker1",
+        //                         "ls",
+        //                         '2018-05-04T16:36:45',
+        //                         '2018-05-04T16:36:45',
+        //                         4,256,2,60,"prova");
 
-        return true;
+        Statement stmt = conn.createStatement();
+        String query="INSERT INTO "+this.scheduleTable+" VALUES(0,";
+        //INSERT INTO example VALUES(0,"docker1","ls",'2018-05-04 16:36:45',120,"vm0");
+        java.sql.Timestamp sqlTimeStart=java.sql.Timestamp.valueOf(startTime);
+        java.sql.Timestamp sqlTimeEnd=java.sql.Timestamp.valueOf(endTime);
+
+        query=query+"  \""+name+"\",\""+command+"\",\""+sqlTimeStart+"\",\""+sqlTimeEnd+"\","+Integer.toString(CPU)+","+Integer.toString(MEM)+","+Integer.toString(DSK)+","+Integer.toString(duration)+",\""+host+"\");";
+        System.out.println(query);
+        return stmt.execute(query);
+
     }
 
 }
