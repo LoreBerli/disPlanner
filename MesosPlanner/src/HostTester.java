@@ -12,7 +12,7 @@ public class HostTester {
         //Physicals
         Logger lg=new Logger("\\logs");
         List<Host> machines=new ArrayList<>();
-        DbInterface dbInterface= new DbInterface("new_sched","root","911nirvana911","null","new_sched");
+        DbInterface dbInterface= new DbInterface("new_sched","root","password","null","new_sched");
         dbInterface.cleanDB();
         Host phy0 = new Host(8,8000,400,"phy0",0.9f,dbInterface);
         Host phy1 = new Host(8,8192,100,"phy1",0.9f,dbInterface);
