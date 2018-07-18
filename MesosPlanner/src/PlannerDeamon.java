@@ -54,28 +54,42 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
 
 
 
-    public void run(){
-        //DONE: TESTARE il check sul tempo.
+    public void run() {
+        //DONE: TESTARE il check sul tempo.7
+        //messageSchedule.put(new String[]{"teste"},LocalDateTime.now());
         sortSchedule();
         Iterator<Map.Entry<String[],LocalDateTime>> it=messageSchedule.entrySet().iterator();
-
+        System.out.println("HASNEXT="+it.hasNext());
         //DONE:sort sulle date. I messaggi ora  sono ordinati per tempo di invio.
-        Map.Entry<String[],LocalDateTime> prossimo = it.next();
-        //System.out.println("Il primo parte a "+prossimo.getValue()+" "+prossimo.getKey());
-        while(running && it.hasNext()){
-            if(LocalDateTime.now().isAfter(prossimo.getValue())){
-                //System.out.println("###DEAMON PLANNER - SIGNAL "+prossimo.getValue()+" -"+prossimo.getKey()[0]+"- "+prossimo.getKey()[1]);
-                String[] data = prossimo.getKey();
-                //sendSignal(prossimo.getKey()[0].toString(),data);
-                try{
 
-                sendSignalToPython(data);}//QUI SI FA
-                catch (IOException io){
-                    System.out.println("DEAMON NO SOCKET");
+
+            //System.out.println("Il primo parte a "+prossimo.getValue()+" "+prossimo.getKey());
+            while (running && it.hasNext()) {
+
+                Map.Entry<String[], LocalDateTime> prossimo = it.next();
+                System.out.println("PROSSIMO " + prossimo.getValue().toString());
+                while (!LocalDateTime.now().isAfter(prossimo.getValue())) {
+                    try{
+                    sleep((long)0.1);}
+                    catch (InterruptedException ie){
+
+                    }
+
                 }
-                prossimo=it.next();
+                    //System.out.println("###DEAMON PLANNER - SIGNAL "+prossimo.getValue()+" -"+prossimo.getKey()[0]+"- "+prossimo.getKey()[1]);
+                    String[] data = prossimo.getKey();
+                    //sendSignal(prossimo.getKey()[0].toString(),data);
+                    try {
+                        System.out.println("DEAMON YEAH SOCKET");
+                        sendSignalToPython(data);
+                    }//QUI SI FA
+                    catch (IOException io) {
+                        System.out.println("DEAMON NO SOCKET");
+                    }
+                    //prossimo = it.next();
+
             }
-        }
+
     }
 
     /**
@@ -84,7 +98,7 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
      */
     public void vMScan(Receiver rec,Map<? extends Schedulable,LocalDateTime> sched){
         nodes.put(rec,sched);
-        if(sched.size()>1){
+        if(sched.size()>0){
             messageSchedule.put(new String[]{"VMON",rec.getInfo()} ,rec.getStartTime().minusSeconds(10));
             messageSchedule.put(new String[]{"VMOFF",rec.getInfo()} ,rec.getEndTime().plusSeconds(10));}
 
@@ -97,10 +111,16 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
      */
     public void dockerScan(Receiver rec,Map<? extends Schedulable,LocalDateTime> sched){
         nodes.put(rec,sched);
-        if(sched.size()>1){
-            //messageSchedule.put(rec.getStartTime(),"DOCKERSTART");
-            messageSchedule.put(new String[]{"DOCKERON",rec.getInfo()} ,rec.getStartTime());
-            messageSchedule.put(new String[]{"DOCKEROFF",rec.getInfo()} ,rec.getEndTime());}
+        if(sched.size()>0){
+
+            for(Map.Entry<? extends Schedulable,LocalDateTime> e: sched.entrySet()){
+
+                //messageSchedule.put(rec.getStartTime(),"DOCKERSTART");
+                e.getKey().setReceiver(rec);
+                System.out.println(" E : "+e.getKey().getInfo());
+            messageSchedule.put(new String[]{"DOCKERON",e.getKey().getInfo()} ,e.getValue());
+            messageSchedule.put(new String[]{"DOCKEROFF",e.getKey().getInfo()} ,e.getValue());}
+        }
     }
 
     private void sortSchedule(){
@@ -146,21 +166,25 @@ DONE: RIFARE messageSchedule -> Map <String[],LocalDateTime>
 
     private void sendSignalToPython(String[] data) throws IOException
     {
-        Socket socket = new Socket("localhost", 8082);
-        BufferedReader stdIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-        String[] splitted = data[1].split(" ");
         ArrayList<String> total = new ArrayList<String>();
         total.add(data[0]);
         total.add(data[1]);
-
-        String commandSpecific = apiFile.getProperty(data[0]);
-
+        String[] splitted = data[1].split(",");
         for(String s :splitted){
             System.out.println(s);
             total.add(s);
 
         }
+        String host=splitted[1].split(";")[1].split(":")[0];
+        int port=Integer.parseInt(splitted[1].split(":")[1]);
+        Socket socket = new Socket(host,port);
+        BufferedReader stdIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+
+        String commandSpecific = apiFile.getProperty(data[0]);
+
+
 
 
         JSONObject j= new JSONObject();

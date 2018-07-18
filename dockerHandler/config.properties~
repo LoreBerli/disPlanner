@@ -1,0 +1,15 @@
+#Db config
+user=root
+password=911nirvana911
+db=test
+procs_table=mach_test
+host_table=QRTZ_VMWARE_HOST
+schedule_table=SCHEDULE
+
+#log config
+loads_path="/loadsLog"
+general_file="/logs"
+
+#machines
+machines="localhost":8022
+

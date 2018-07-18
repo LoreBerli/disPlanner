@@ -14,6 +14,7 @@ public interface Receiver {
 
     boolean queueJob(Schedulable s);
     float getTreshold();
+    String getID();
     String getInfo();
     void saveSchedule() throws IOException;
     void saveLoads()throws IOException;

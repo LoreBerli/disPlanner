@@ -28,7 +28,7 @@ public class MesosPlanner {
         List<Job> jobs=new ArrayList<>();
         if(!test) {
             /// Interfaccia Database
-            DbInterface db = new DbInterface(properties.getProperty("db"),properties.getProperty("user"),properties.getProperty("password"),properties.getProperty("procs_table"),properties.getProperty("sched_table"));
+            DbInterface db = new DbInterface(properties.getProperty("db"),properties.getProperty("user"),properties.getProperty("password"),properties.getProperty("procs_table"),properties.getProperty("sched_table"),properties.getProperty("machines"));
             try {
                 park = db.getRealMachines();
                 //COME SI TROVANO I JOBS??

@@ -50,7 +50,7 @@ public class TestingUtils {
         long offset=rnd.nextInt((int)secondsOffset);
         for(Task t:tsks){
             offset=offset+secondsOffset;
-            Job j = new Job(t, LocalDateTime.now().plusSeconds(offset),0,true,null);
+            Job j = new Job("alpine",t, LocalDateTime.now().plusSeconds(offset),0,true,null);
             toReturn.add(j);
         }
         return toReturn;

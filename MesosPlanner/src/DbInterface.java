@@ -23,12 +23,13 @@ public class DbInterface {
     private String db;
     private String user;
     private String pw;
+    private String machs;
     private String docks;
 
     private String scheduleTable;
 
 
-    public DbInterface(String db,String user,String pw,String procs,String scheduleTable){
+    public DbInterface(String db,String user,String pw,String procs,String scheduleTable,String machs){
         try
         {
             this.db=db;
@@ -36,6 +37,7 @@ public class DbInterface {
             this.scheduleTable=scheduleTable;
             this.pw=pw;
             this.docks=procs;
+            this.machs=machs;
             Class.forName("com.mysql.jdbc.Driver");
 
             conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/"+db,user,pw);
@@ -61,22 +63,52 @@ public class DbInterface {
 
     }
 
-    public List<Machine> getMachines()throws java.sql.SQLException{
+    public List<Host> getMachines()throws java.sql.SQLException{
 
         Statement stmt = conn.createStatement() ;
-        String query = "SELECT HOSTNAME,AVG(CPU_CORES),AVG(TOTAL_CPU_CAPACITY),AVG(MEMORY_SIZE) FROM QRTZ_VMWARE_HOST GROUP BY HOSTNAME ASC;" ;
+        String query = "SELECT * FROM " + this.machs ;
         ResultSet rs = stmt.executeQuery(query) ;
-        List<Machine> machines=new ArrayList<>();
-        while (rs.next()) {
-            int CPU = Integer.parseInt(rs.getString("AVG(CPU_CORES)"));
 
-            int MEM = Integer.parseInt(rs.getString("AVG(MEMORY_SIZE)").substring(0,3));
-            int DSK = 20000;
-            String name = rs.getString("HOSTNAME");
-            Machine tmp = new Machine(CPU,MEM,DSK,name);
-            machines.add(tmp);
+        List<Host> machs=new ArrayList<>();
+        while (rs.next()) {
+
+            int CPU = Integer.parseInt(rs.getString("CPU"));
+
+            int MEM = Integer.parseInt(rs.getString("MEM").substring(0,3));
+            int DSK = Integer.parseInt(rs.getString("DSK").substring(0,2));
+            float tresh = Float.parseFloat(rs.getString("tresh").substring(0,3));
+            String adress = rs.getString("address");
+            String name = rs.getString("name");
+            Host tmp = new Host(CPU,MEM,DSK,name+":"+adress,tresh,this);
+            machs.add(tmp);
         }
-        return machines;
+        return machs;
+    }
+
+
+    //TODO: TEST ME TEST ME TEST ME TEST ME
+
+    public List<Job> getDockers()throws java.sql.SQLException{
+        //////this shlould get the job done
+        Statement stmt = conn.createStatement() ;
+        String query = "SELECT * FROM JOBS;" ;
+        ResultSet rs = stmt.executeQuery(query) ;
+
+        List<Job> jobs=new ArrayList<>();
+        while (rs.next()) {
+            String command=rs.getString("command");
+            String image= rs.getString("image");
+            LocalDateTime start = rs.getTimestamp("startTime").toLocalDateTime();
+            int CPU = Integer.parseInt(rs.getString("CPU"));
+
+            int MEM = Integer.parseInt(rs.getString("MEM"));
+            int DSK = Integer.parseInt(rs.getString("DSK"));
+            int dur = Integer.parseInt(rs.getString("dur"));
+            Task tt = new Task(command,CPU,MEM,DSK,dur);
+            Job jb = new Job(image,tt,start,1,true,null);
+            jobs.add(jb);
+        }
+        return jobs;
     }
 
     public  Task getTaskHistoricData(String ID) throws java.sql.SQLException{

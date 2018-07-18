@@ -1,37 +1,44 @@
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
-public class HostTester {
+public class RealTester {
 
-
-
-    public static void main(String[] args) throws IOException,SQLException{
+    public static void main(String[] args) throws IOException,SQLException {
         //Physicals
-        Logger lg=new Logger("\\logs");
+        Properties properties = new Properties();
+        InputStream inp = new FileInputStream("config.properties");
+        properties.load(inp);
+
+        /// Logger
+        Logger lg=new Logger(properties.getProperty("general_file"));
         List<Host> machines=new ArrayList<>();
-        DbInterface dbInterface= new DbInterface("stuff","root","","JOBS","new_sched","machines");
+        System.out.println(properties.getProperty("sched_table"));
+        DbInterface dbInterface= new DbInterface(properties.getProperty("db"),properties.getProperty("user"),properties.getProperty("password"),properties.getProperty("procs_table"),properties.getProperty("sched_table"),properties.getProperty("host_table"));
         dbInterface.cleanDB();
-        Host phy0 = new Host(8,8000,400,"phy0",0.9f,dbInterface);
-        Host phy1 = new Host(8,8192,100,"phy1",0.9f,dbInterface);
-        Host phy2 = new Host(12,12000,400,"phy2",0.9f,dbInterface);
+        Host phy0 = new Host(8,8000,400,"phy",0.9f,dbInterface);
+
         machines.add(phy0);
-        machines.add(phy1);
-        machines.add(phy2);
+
 
         //VMs////
         List<Host> vmPark=dbInterface.getMachines();
-        for(Host h:vmPark){
-            System.out.println(h.ID);
-        }
-
         ////////
 
-
+        List<Job> jobs = dbInterface.getDockers();
         //Jobs////////
-        List<Job> jobs = TestingUtils.generateDummyJobs(60,60);
+//        List<Job> jobs = new ArrayList<>();
+//        Task t = new Task("sleep 30",2,200,20,120);
+//        Task t2 = new Task("ps",2,200,20,120);
+//        Job j = new Job("alpine:latest",t, LocalDateTime.now().plusSeconds(30),1,true,null);
+//        Job j2 = new Job("alpine:latest",t2,LocalDateTime.now().plusSeconds(20),1,true,null);
+//        jobs.add(j);
+//        jobs.add(j2);
         ////////////////////////////////////////////
 
 //        /////////CONSTRAINT TEST
@@ -89,7 +96,7 @@ public class HostTester {
             m.saveSchedule();
             m.saveLoads();
             //m.saveScheduleToDB();
-            deam.vMScan(m,m.getCurrentSchedule());
+            //deam.vMScan(m,m.getCurrentSchedule());
 
         }
 
@@ -110,5 +117,3 @@ public class HostTester {
 
     }
 }
-
-

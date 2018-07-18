@@ -134,6 +134,7 @@ public class Host implements Receiver,Schedulable{
 //
 //    }
 
+
     /**
      * Data una Mappa(Schedulable,StartTime) controllo che l'utilizzo delle risorse rimanga sotto la soglia
      * Per ogni JOB controllo al tempo di start del Job il carico sulla macchina.
@@ -387,7 +388,7 @@ public class Host implements Receiver,Schedulable{
     public void saveScheduleToDB() throws IOException,SQLException{
         //this.(this.getStartTime().plusSeconds(offset));
         for(Map.Entry<Schedulable,LocalDateTime> entry:this.currentSchedule.entrySet()){
-            db.writeScheduleToDb(entry.getKey().getID(),"ls",entry.getValue(),entry.getKey().getEndTime(),entry.getKey().getExpectedMEM(),entry.getKey().getExpectedDSK(),entry.getKey().getExpectedCPU(),entry.getKey().getExpectedDUR(),this.ID);
+            db.writeScheduleToDb(entry.getKey().getID(),entry.getKey().getTask().getDescriptor(),entry.getValue(),entry.getKey().getEndTime(),entry.getKey().getExpectedMEM(),entry.getKey().getExpectedDSK(),entry.getKey().getExpectedCPU(),entry.getKey().getExpectedDUR(),this.ID);
         }
 
 
@@ -440,6 +441,7 @@ public class Host implements Receiver,Schedulable{
     public String getInfo(){
         this.updateAverageResDuringCurrentSchedule();
         String info="id;"+this.ID;
+
         info+=" CPU;"+this.getTotalCPU();
         info+=" MEM;"+this.getTotalMEM();
         info+=" DSK;"+this.getTotalDSK();
@@ -450,6 +452,7 @@ public class Host implements Receiver,Schedulable{
             info += " endTime;" + this.getEndTime().toString();
             info += " duration;" + this.getExpectedDUR();
         }
+        info+=" treshold;"+this.treshold;
         //info+="\n";
         return info;
     }

@@ -40,9 +40,10 @@ public class Job implements Schedulable{
     //TODO: deadline come LocalDateTime , checkDeadline(LocalDateTime proposedStart) , cambiare tutti gli ''int start'' in ''LocalDateTime tStart''
     private Task tsk;
     private boolean reAllocable;
+    private String name;
     private int priority;
     public String getID(){
-        return this.tsk.getDescriptor();
+        return this.name;
     }
     /**
      * tempo di inizio del {@link Job}
@@ -64,8 +65,8 @@ public class Job implements Schedulable{
     private Receiver assignedMachine;
 
 
-    public Job(Task tsk,LocalDateTime start,int priority,boolean reAllocable,Receiver m){
-
+    public Job(String name,Task tsk,LocalDateTime start,int priority,boolean reAllocable,Receiver m){
+        this.name=name;
         this.tsk=tsk;
         this.tStart=start;
         this.priority = priority;
@@ -90,8 +91,13 @@ public class Job implements Schedulable{
         this.assignedMachine=j.assignedMachine;
         this.secondsDuration =tsk.getExpectedDUR();
     }
+
     public Receiver getRecevier(){
         return this.assignedMachine;
+    }
+
+    public void setReceiver(Receiver rec){
+        this.assignedMachine=rec;
     }
 
     public LocalDateTime getStartTime(){
@@ -163,7 +169,18 @@ public class Job implements Schedulable{
 
     @Override
     public String getInfo() {
-        return toString();
+
+        String info="name;"+this.name;
+        info+=",host;"+this.getRecevier().getID();
+        info+=",command;"+this.getTask().getDescriptor();
+        info+=",CPU;"+this.getExpectedCPU();
+        info+=",MEM;"+this.getExpectedMEM();
+        info+=",DSK;"+this.getExpectedDSK();
+            info += ",startTime;" + this.getStartTime().toString();
+            info += ",endTime;" + this.getEndTime().toString();
+            info += ",duration;" + this.getExpectedDUR();
+
+        return info;
     }
 
     public void setStart(LocalDateTime tm){

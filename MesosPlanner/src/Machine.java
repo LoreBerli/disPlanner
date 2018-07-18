@@ -195,7 +195,9 @@ public class Machine implements Receiver,Schedulable{
         System.out.println("job"+j.getTask());
         return false;
     }
-
+    public void setReceiver(Receiver rec){
+        return;
+    }
     /**
      * Ritorna una lista di {@link Job} che sarebbero in esecuzione al tempo t secondo la {@link Map<Job,LocalDateTime>}proposedSchedule
      * @param t

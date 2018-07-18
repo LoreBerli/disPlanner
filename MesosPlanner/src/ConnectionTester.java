@@ -18,10 +18,10 @@ public class ConnectionTester {
 
         while (true) {
 
-            Socket socket = new Socket("localhost", 8082);
+            Socket socket = new Socket("192.168.1.10", 8082);
             BufferedReader stdIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-            out.println("DAHANE");
+            out.println("ok");
 
             System.out.println("Message sent");
             //stdIn.readLine();

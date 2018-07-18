@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
  */
 public interface Schedulable {
     Receiver getRecevier();
-
+    public void setReceiver(Receiver rec);
     LocalDateTime getStartTime();
     LocalDateTime getEndTime();
     boolean isSchedulable();
