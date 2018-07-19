@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="utf-8" />
+      <title>doc</title>
+      <style>.markdown-preview:not([data-use-github-style]) { padding: 2em; font-size: 1.2em; color: rgb(171, 178, 191); background-color: rgb(40, 44, 52); overflow: auto; }
+.markdown-preview:not([data-use-github-style]) > :first-child { margin-top: 0px; }
+.markdown-preview:not([data-use-github-style]) h1, .markdown-preview:not([data-use-github-style]) h2, .markdown-preview:not([data-use-github-style]) h3, .markdown-preview:not([data-use-github-style]) h4, .markdown-preview:not([data-use-github-style]) h5, .markdown-preview:not([data-use-github-style]) h6 { line-height: 1.2; margin-top: 1.5em; margin-bottom: 0.5em; color: rgb(255, 255, 255); }
+.markdown-preview:not([data-use-github-style]) h1 { font-size: 2.4em; font-weight: 300; }
+.markdown-preview:not([data-use-github-style]) h2 { font-size: 1.8em; font-weight: 400; }
+.markdown-preview:not([data-use-github-style]) h3 { font-size: 1.5em; font-weight: 500; }
+.markdown-preview:not([data-use-github-style]) h4 { font-size: 1.2em; font-weight: 600; }
+.markdown-preview:not([data-use-github-style]) h5 { font-size: 1.1em; font-weight: 600; }
+.markdown-preview:not([data-use-github-style]) h6 { font-size: 1em; font-weight: 600; }
+.markdown-preview:not([data-use-github-style]) strong { color: rgb(255, 255, 255); }
+.markdown-preview:not([data-use-github-style]) del { color: rgb(124, 135, 156); }
+.markdown-preview:not([data-use-github-style]) a, .markdown-preview:not([data-use-github-style]) a code { color: rgb(82, 139, 255); }
+.markdown-preview:not([data-use-github-style]) img { max-width: 100%; }
+.markdown-preview:not([data-use-github-style]) > p { margin-top: 0px; margin-bottom: 1.5em; }
+.markdown-preview:not([data-use-github-style]) > ul, .markdown-preview:not([data-use-github-style]) > ol { margin-bottom: 1.5em; }
+.markdown-preview:not([data-use-github-style]) blockquote { margin: 1.5em 0px; font-size: inherit; color: rgb(124, 135, 156); border-color: rgb(75, 83, 98); border-width: 4px; }
+.markdown-preview:not([data-use-github-style]) hr { margin: 3em 0px; border-top: 2px dashed rgb(75, 83, 98); background: none; }
+.markdown-preview:not([data-use-github-style]) table { margin: 1.5em 0px; }
+.markdown-preview:not([data-use-github-style]) th { color: rgb(255, 255, 255); }
+.markdown-preview:not([data-use-github-style]) th, .markdown-preview:not([data-use-github-style]) td { padding: 0.66em 1em; border: 1px solid rgb(75, 83, 98); }
+.markdown-preview:not([data-use-github-style]) code { color: rgb(255, 255, 255); background-color: rgb(58, 63, 75); }
+.markdown-preview:not([data-use-github-style]) pre.editor-colors { margin: 1.5em 0px; padding: 1em; font-size: 0.92em; border-radius: 3px; background-color: rgb(49, 54, 63); }
+.markdown-preview:not([data-use-github-style]) kbd { color: rgb(255, 255, 255); border-width: 1px 1px 2px; border-style: solid; border-color: rgb(75, 83, 98) rgb(75, 83, 98) rgb(62, 68, 81); border-image: initial; background-color: rgb(58, 63, 75); }
+.markdown-preview[data-use-github-style] { font-family: "Helvetica Neue", Helvetica, "Segoe UI", Arial, freesans, sans-serif; line-height: 1.6; word-wrap: break-word; padding: 30px; font-size: 16px; color: rgb(51, 51, 51); background-color: rgb(255, 255, 255); overflow: scroll; }
+.markdown-preview[data-use-github-style] > :first-child { margin-top: 0px !important; }
+.markdown-preview[data-use-github-style] > :last-child { margin-bottom: 0px !important; }
+.markdown-preview[data-use-github-style] a:not([href]) { color: inherit; text-decoration: none; }
+.markdown-preview[data-use-github-style] .absent { color: rgb(204, 0, 0); }
+.markdown-preview[data-use-github-style] .anchor { position: absolute; top: 0px; left: 0px; display: block; padding-right: 6px; padding-left: 30px; margin-left: -30px; }
+.markdown-preview[data-use-github-style] .anchor:focus { outline: none; }
+.markdown-preview[data-use-github-style] h1, .markdown-preview[data-use-github-style] h2, .markdown-preview[data-use-github-style] h3, .markdown-preview[data-use-github-style] h4, .markdown-preview[data-use-github-style] h5, .markdown-preview[data-use-github-style] h6 { position: relative; margin-top: 1em; margin-bottom: 16px; font-weight: bold; line-height: 1.4; }
+.markdown-preview[data-use-github-style] h1 .octicon-link, .markdown-preview[data-use-github-style] h2 .octicon-link, .markdown-preview[data-use-github-style] h3 .octicon-link, .markdown-preview[data-use-github-style] h4 .octicon-link, .markdown-preview[data-use-github-style] h5 .octicon-link, .markdown-preview[data-use-github-style] h6 .octicon-link { display: none; color: rgb(0, 0, 0); vertical-align: middle; }
+.markdown-preview[data-use-github-style] h1:hover .anchor, .markdown-preview[data-use-github-style] h2:hover .anchor, .markdown-preview[data-use-github-style] h3:hover .anchor, .markdown-preview[data-use-github-style] h4:hover .anchor, .markdown-preview[data-use-github-style] h5:hover .anchor, .markdown-preview[data-use-github-style] h6:hover .anchor { padding-left: 8px; margin-left: -30px; text-decoration: none; }
+.markdown-preview[data-use-github-style] h1:hover .anchor .octicon-link, .markdown-preview[data-use-github-style] h2:hover .anchor .octicon-link, .markdown-preview[data-use-github-style] h3:hover .anchor .octicon-link, .markdown-preview[data-use-github-style] h4:hover .anchor .octicon-link, .markdown-preview[data-use-github-style] h5:hover .anchor .octicon-link, .markdown-preview[data-use-github-style] h6:hover .anchor .octicon-link { display: inline-block; }
+.markdown-preview[data-use-github-style] h1 tt, .markdown-preview[data-use-github-style] h2 tt, .markdown-preview[data-use-github-style] h3 tt, .markdown-preview[data-use-github-style] h4 tt, .markdown-preview[data-use-github-style] h5 tt, .markdown-preview[data-use-github-style] h6 tt, .markdown-preview[data-use-github-style] h1 code, .markdown-preview[data-use-github-style] h2 code, .markdown-preview[data-use-github-style] h3 code, .markdown-preview[data-use-github-style] h4 code, .markdown-preview[data-use-github-style] h5 code, .markdown-preview[data-use-github-style] h6 code { font-size: inherit; }
+.markdown-preview[data-use-github-style] h1 { padding-bottom: 0.3em; font-size: 2.25em; line-height: 1.2; border-bottom: 1px solid rgb(238, 238, 238); }
+.markdown-preview[data-use-github-style] h1 .anchor { line-height: 1; }
+.markdown-preview[data-use-github-style] h2 { padding-bottom: 0.3em; font-size: 1.75em; line-height: 1.225; border-bottom: 1px solid rgb(238, 238, 238); }
+.markdown-preview[data-use-github-style] h2 .anchor { line-height: 1; }
+.markdown-preview[data-use-github-style] h3 { font-size: 1.5em; line-height: 1.43; }
+.markdown-preview[data-use-github-style] h3 .anchor { line-height: 1.2; }
+.markdown-preview[data-use-github-style] h4 { font-size: 1.25em; }
+.markdown-preview[data-use-github-style] h4 .anchor { line-height: 1.2; }
+.markdown-preview[data-use-github-style] h5 { font-size: 1em; }
+.markdown-preview[data-use-github-style] h5 .anchor { line-height: 1.1; }
+.markdown-preview[data-use-github-style] h6 { font-size: 1em; color: rgb(119, 119, 119); }
+.markdown-preview[data-use-github-style] h6 .anchor { line-height: 1.1; }
+.markdown-preview[data-use-github-style] p, .markdown-preview[data-use-github-style] blockquote, .markdown-preview[data-use-github-style] ul, .markdown-preview[data-use-github-style] ol, .markdown-preview[data-use-github-style] dl, .markdown-preview[data-use-github-style] table, .markdown-preview[data-use-github-style] pre { margin-top: 0px; margin-bottom: 16px; }
+.markdown-preview[data-use-github-style] hr { height: 4px; padding: 0px; margin: 16px 0px; background-color: rgb(231, 231, 231); border: 0px none; }
+.markdown-preview[data-use-github-style] ul, .markdown-preview[data-use-github-style] ol { padding-left: 2em; }
+.markdown-preview[data-use-github-style] ul.no-list, .markdown-preview[data-use-github-style] ol.no-list { padding: 0px; list-style-type: none; }
+.markdown-preview[data-use-github-style] ul ul, .markdown-preview[data-use-github-style] ul ol, .markdown-preview[data-use-github-style] ol ol, .markdown-preview[data-use-github-style] ol ul { margin-top: 0px; margin-bottom: 0px; }
+.markdown-preview[data-use-github-style] li > p { margin-top: 16px; }
+.markdown-preview[data-use-github-style] dl { padding: 0px; }
+.markdown-preview[data-use-github-style] dl dt { padding: 0px; margin-top: 16px; font-size: 1em; font-style: italic; font-weight: bold; }
+.markdown-preview[data-use-github-style] dl dd { padding: 0px 16px; margin-bottom: 16px; }
+.markdown-preview[data-use-github-style] blockquote { padding: 0px 15px; color: rgb(119, 119, 119); border-left: 4px solid rgb(221, 221, 221); }
+.markdown-preview[data-use-github-style] blockquote > :first-child { margin-top: 0px; }
+.markdown-preview[data-use-github-style] blockquote > :last-child { margin-bottom: 0px; }
+.markdown-preview[data-use-github-style] table { display: block; width: 100%; overflow: auto; word-break: keep-all; }
+.markdown-preview[data-use-github-style] table th { font-weight: bold; }
+.markdown-preview[data-use-github-style] table th, .markdown-preview[data-use-github-style] table td { padding: 6px 13px; border: 1px solid rgb(221, 221, 221); }
+.markdown-preview[data-use-github-style] table tr { background-color: rgb(255, 255, 255); border-top: 1px solid rgb(204, 204, 204); }
+.markdown-preview[data-use-github-style] table tr:nth-child(2n) { background-color: rgb(248, 248, 248); }
+.markdown-preview[data-use-github-style] img { max-width: 100%; box-sizing: border-box; }
+.markdown-preview[data-use-github-style] .emoji { max-width: none; }
+.markdown-preview[data-use-github-style] span.frame { display: block; overflow: hidden; }
+.markdown-preview[data-use-github-style] span.frame > span { display: block; float: left; width: auto; padding: 7px; margin: 13px 0px 0px; overflow: hidden; border: 1px solid rgb(221, 221, 221); }
+.markdown-preview[data-use-github-style] span.frame span img { display: block; float: left; }
+.markdown-preview[data-use-github-style] span.frame span span { display: block; padding: 5px 0px 0px; clear: both; color: rgb(51, 51, 51); }
+.markdown-preview[data-use-github-style] span.align-center { display: block; overflow: hidden; clear: both; }
+.markdown-preview[data-use-github-style] span.align-center > span { display: block; margin: 13px auto 0px; overflow: hidden; text-align: center; }
+.markdown-preview[data-use-github-style] span.align-center span img { margin: 0px auto; text-align: center; }
+.markdown-preview[data-use-github-style] span.align-right { display: block; overflow: hidden; clear: both; }
+.markdown-preview[data-use-github-style] span.align-right > span { display: block; margin: 13px 0px 0px; overflow: hidden; text-align: right; }
+.markdown-preview[data-use-github-style] span.align-right span img { margin: 0px; text-align: right; }
+.markdown-preview[data-use-github-style] span.float-left { display: block; float: left; margin-right: 13px; overflow: hidden; }
+.markdown-preview[data-use-github-style] span.float-left span { margin: 13px 0px 0px; }
+.markdown-preview[data-use-github-style] span.float-right { display: block; float: right; margin-left: 13px; overflow: hidden; }
+.markdown-preview[data-use-github-style] span.float-right > span { display: block; margin: 13px auto 0px; overflow: hidden; text-align: right; }
+.markdown-preview[data-use-github-style] code, .markdown-preview[data-use-github-style] tt { padding: 0.2em 0px; margin: 0px; font-size: 85%; background-color: rgba(0, 0, 0, 0.04); border-radius: 3px; }
+.markdown-preview[data-use-github-style] code::before, .markdown-preview[data-use-github-style] tt::before, .markdown-preview[data-use-github-style] code::after, .markdown-preview[data-use-github-style] tt::after { letter-spacing: -0.2em; content: " "; }
+.markdown-preview[data-use-github-style] code br, .markdown-preview[data-use-github-style] tt br { display: none; }
+.markdown-preview[data-use-github-style] del code { text-decoration: inherit; }
+.markdown-preview[data-use-github-style] pre > code { padding: 0px; margin: 0px; font-size: 100%; word-break: normal; white-space: pre; background: transparent; border: 0px; }
+.markdown-preview[data-use-github-style] .highlight { margin-bottom: 16px; }
+.markdown-preview[data-use-github-style] .highlight pre, .markdown-preview[data-use-github-style] pre { padding: 16px; overflow: auto; font-size: 85%; line-height: 1.45; background-color: rgb(247, 247, 247); border-radius: 3px; }
+.markdown-preview[data-use-github-style] .highlight pre { margin-bottom: 0px; word-break: normal; }
+.markdown-preview[data-use-github-style] pre { word-wrap: normal; }
+.markdown-preview[data-use-github-style] pre code, .markdown-preview[data-use-github-style] pre tt { display: inline; max-width: initial; padding: 0px; margin: 0px; overflow: initial; line-height: inherit; word-wrap: normal; background-color: transparent; border: 0px; }
+.markdown-preview[data-use-github-style] pre code::before, .markdown-preview[data-use-github-style] pre tt::before, .markdown-preview[data-use-github-style] pre code::after, .markdown-preview[data-use-github-style] pre tt::after { content: normal; }
+.markdown-preview[data-use-github-style] kbd { display: inline-block; padding: 3px 5px; font-size: 11px; line-height: 10px; color: rgb(85, 85, 85); vertical-align: middle; background-color: rgb(252, 252, 252); border-width: 1px; border-style: solid; border-color: rgb(204, 204, 204) rgb(204, 204, 204) rgb(187, 187, 187); border-image: initial; border-radius: 3px; box-shadow: rgb(187, 187, 187) 0px -1px 0px inset; }
+.markdown-preview[data-use-github-style] a { color: rgb(51, 122, 183); }
+.markdown-preview[data-use-github-style] code { color: inherit; }
+.markdown-preview[data-use-github-style] pre.editor-colors { padding: 0.8em 1em; margin-bottom: 1em; font-size: 0.85em; border-radius: 4px; overflow: auto; }
+.scrollbars-visible-always .markdown-preview pre.editor-colors .vertical-scrollbar, .scrollbars-visible-always .markdown-preview pre.editor-colors .horizontal-scrollbar { visibility: hidden; }
+.scrollbars-visible-always .markdown-preview pre.editor-colors:hover .vertical-scrollbar, .scrollbars-visible-always .markdown-preview pre.editor-colors:hover .horizontal-scrollbar { visibility: visible; }
+.markdown-preview .task-list-item-checkbox { position: absolute; margin: 0.25em 0px 0px -1.4em; }
+.bracket-matcher .region {
+  border-bottom: 1px dotted lime;
+  position: absolute;
+}
+.line-number.bracket-matcher.bracket-matcher {
+  color: #abb2bf;
+  background-color: #3a3f4b;
+}
+
+.spell-check-misspelling .region {
+  border-bottom: 2px dotted rgba(255, 51, 51, 0.75);
+}
+.spell-check-corrections {
+  width: 25em !important;
+}
+
+pre.editor-colors {
+  background-color: #282c34;
+  color: #abb2bf;
+}
+pre.editor-colors .line.cursor-line {
+  background-color: rgba(153, 187, 255, 0.04);
+}
+pre.editor-colors .invisible {
+  color: #abb2bf;
+}
+pre.editor-colors .cursor {
+  border-left: 2px solid #528bff;
+}
+pre.editor-colors .selection .region {
+  background-color: #3e4451;
+}
+pre.editor-colors .bracket-matcher .region {
+  border-bottom: 1px solid #528bff;
+  box-sizing: border-box;
+}
+pre.editor-colors .invisible-character {
+  color: rgba(171, 178, 191, 0.15);
+}
+pre.editor-colors .indent-guide {
+  color: rgba(171, 178, 191, 0.15);
+}
+pre.editor-colors .wrap-guide {
+  background-color: rgba(171, 178, 191, 0.15);
+}
+pre.editor-colors .find-result .region.region.region,
+pre.editor-colors .current-result .region.region.region {
+  border-radius: 2px;
+  background-color: rgba(82, 139, 255, 0.24);
+  transition: border-color 0.4s;
+}
+pre.editor-colors .find-result .region.region.region {
+  border: 2px solid transparent;
+}
+pre.editor-colors .current-result .region.region.region {
+  border: 2px solid #528bff;
+  transition-duration: .1s;
+}
+pre.editor-colors .gutter .line-number {
+  color: #636d83;
+  -webkit-font-smoothing: antialiased;
+}
+pre.editor-colors .gutter .line-number.cursor-line {
+  color: #abb2bf;
+  background-color: #3a3f4b;
+}
+pre.editor-colors .gutter .line-number.cursor-line-no-selection {
+  background-color: transparent;
+}
+pre.editor-colors .gutter .line-number .icon-right {
+  color: #abb2bf;
+}
+pre.editor-colors .gutter:not(.git-diff-icon) .line-number.git-line-removed.git-line-removed::before {
+  bottom: -3px;
+}
+pre.editor-colors .gutter:not(.git-diff-icon) .line-number.git-line-removed::after {
+  content: "";
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  width: 25px;
+  border-bottom: 1px dotted rgba(224, 82, 82, 0.5);
+  pointer-events: none;
+}
+pre.editor-colors .gutter .line-number.folded,
+pre.editor-colors .gutter .line-number:after,
+pre.editor-colors .fold-marker:after {
+  color: #abb2bf;
+}
+.syntax--comment {
+  color: #5c6370;
+  font-style: italic;
+}
+.syntax--comment .syntax--markup.syntax--link {
+  color: #5c6370;
+}
+.syntax--entity.syntax--name.syntax--type {
+  color: #e5c07b;
+}
+.syntax--entity.syntax--other.syntax--inherited-class {
+  color: #98c379;
+}
+.syntax--keyword {
+  color: #c678dd;
+}
+.syntax--keyword.syntax--control {
+  color: #c678dd;
+}
+.syntax--keyword.syntax--operator {
+  color: #abb2bf;
+}
+.syntax--keyword.syntax--other.syntax--special-method {
+  color: #61afef;
+}
+.syntax--keyword.syntax--other.syntax--unit {
+  color: #d19a66;
+}
+.syntax--storage {
+  color: #c678dd;
+}
+.syntax--storage.syntax--type.syntax--annotation,
+.syntax--storage.syntax--type.syntax--primitive {
+  color: #c678dd;
+}
+.syntax--storage.syntax--modifier.syntax--package,
+.syntax--storage.syntax--modifier.syntax--import {
+  color: #abb2bf;
+}
+.syntax--constant {
+  color: #d19a66;
+}
+.syntax--constant.syntax--variable {
+  color: #d19a66;
+}
+.syntax--constant.syntax--character.syntax--escape {
+  color: #56b6c2;
+}
+.syntax--constant.syntax--numeric {
+  color: #d19a66;
+}
+.syntax--constant.syntax--other.syntax--color {
+  color: #56b6c2;
+}
+.syntax--constant.syntax--other.syntax--symbol {
+  color: #56b6c2;
+}
+.syntax--variable {
+  color: #e06c75;
+}
+.syntax--variable.syntax--interpolation {
+  color: #be5046;
+}
+.syntax--variable.syntax--parameter {
+  color: #abb2bf;
+}
+.syntax--string {
+  color: #98c379;
+}
+.syntax--string.syntax--regexp {
+  color: #56b6c2;
+}
+.syntax--string.syntax--regexp .syntax--source.syntax--ruby.syntax--embedded {
+  color: #e5c07b;
+}
+.syntax--string.syntax--other.syntax--link {
+  color: #e06c75;
+}
+.syntax--punctuation.syntax--definition.syntax--comment {
+  color: #5c6370;
+}
+.syntax--punctuation.syntax--definition.syntax--method-parameters,
+.syntax--punctuation.syntax--definition.syntax--function-parameters,
+.syntax--punctuation.syntax--definition.syntax--parameters,
+.syntax--punctuation.syntax--definition.syntax--separator,
+.syntax--punctuation.syntax--definition.syntax--seperator,
+.syntax--punctuation.syntax--definition.syntax--array {
+  color: #abb2bf;
+}
+.syntax--punctuation.syntax--definition.syntax--heading,
+.syntax--punctuation.syntax--definition.syntax--identity {
+  color: #61afef;
+}
+.syntax--punctuation.syntax--definition.syntax--bold {
+  color: #e5c07b;
+  font-weight: bold;
+}
+.syntax--punctuation.syntax--definition.syntax--italic {
+  color: #c678dd;
+  font-style: italic;
+}
+.syntax--punctuation.syntax--section.syntax--embedded {
+  color: #be5046;
+}
+.syntax--punctuation.syntax--section.syntax--method,
+.syntax--punctuation.syntax--section.syntax--class,
+.syntax--punctuation.syntax--section.syntax--inner-class {
+  color: #abb2bf;
+}
+.syntax--support.syntax--class {
+  color: #e5c07b;
+}
+.syntax--support.syntax--type {
+  color: #56b6c2;
+}
+.syntax--support.syntax--function {
+  color: #56b6c2;
+}
+.syntax--support.syntax--function.syntax--any-method {
+  color: #61afef;
+}
+.syntax--entity.syntax--name.syntax--function {
+  color: #61afef;
+}
+.syntax--entity.syntax--name.syntax--class,
+.syntax--entity.syntax--name.syntax--type.syntax--class {
+  color: #e5c07b;
+}
+.syntax--entity.syntax--name.syntax--section {
+  color: #61afef;
+}
+.syntax--entity.syntax--name.syntax--tag {
+  color: #e06c75;
+}
+.syntax--entity.syntax--other.syntax--attribute-name {
+  color: #d19a66;
+}
+.syntax--entity.syntax--other.syntax--attribute-name.syntax--id {
+  color: #61afef;
+}
+.syntax--meta.syntax--class {
+  color: #e5c07b;
+}
+.syntax--meta.syntax--class.syntax--body {
+  color: #abb2bf;
+}
+.syntax--meta.syntax--method-call,
+.syntax--meta.syntax--method {
+  color: #abb2bf;
+}
+.syntax--meta.syntax--definition.syntax--variable {
+  color: #e06c75;
+}
+.syntax--meta.syntax--link {
+  color: #d19a66;
+}
+.syntax--meta.syntax--require {
+  color: #61afef;
+}
+.syntax--meta.syntax--selector {
+  color: #c678dd;
+}
+.syntax--meta.syntax--separator {
+  color: #abb2bf;
+}
+.syntax--meta.syntax--tag {
+  color: #abb2bf;
+}
+.syntax--underline {
+  text-decoration: underline;
+}
+.syntax--none {
+  color: #abb2bf;
+}
+.syntax--invalid.syntax--deprecated {
+  color: #523d14 !important;
+  background-color: #e0c285 !important;
+}
+.syntax--invalid.syntax--illegal {
+  color: white !important;
+  background-color: #e05252 !important;
+}
+.syntax--markup.syntax--bold {
+  color: #d19a66;
+  font-weight: bold;
+}
+.syntax--markup.syntax--changed {
+  color: #c678dd;
+}
+.syntax--markup.syntax--deleted {
+  color: #e06c75;
+}
+.syntax--markup.syntax--italic {
+  color: #c678dd;
+  font-style: italic;
+}
+.syntax--markup.syntax--heading {
+  color: #e06c75;
+}
+.syntax--markup.syntax--heading .syntax--punctuation.syntax--definition.syntax--heading {
+  color: #61afef;
+}
+.syntax--markup.syntax--link {
+  color: #56b6c2;
+}
+.syntax--markup.syntax--inserted {
+  color: #98c379;
+}
+.syntax--markup.syntax--quote {
+  color: #d19a66;
+}
+.syntax--markup.syntax--raw {
+  color: #98c379;
+}
+.syntax--source.syntax--c .syntax--keyword.syntax--operator {
+  color: #c678dd;
+}
+.syntax--source.syntax--cpp .syntax--keyword.syntax--operator {
+  color: #c678dd;
+}
+.syntax--source.syntax--cs .syntax--keyword.syntax--operator {
+  color: #c678dd;
+}
+.syntax--source.syntax--css .syntax--property-name,
+.syntax--source.syntax--css .syntax--property-value {
+  color: #828997;
+}
+.syntax--source.syntax--css .syntax--property-name.syntax--support,
+.syntax--source.syntax--css .syntax--property-value.syntax--support {
+  color: #abb2bf;
+}
+.syntax--source.syntax--elixir .syntax--source.syntax--embedded.syntax--source {
+  color: #abb2bf;
+}
+.syntax--source.syntax--elixir .syntax--constant.syntax--language,
+.syntax--source.syntax--elixir .syntax--constant.syntax--numeric,
+.syntax--source.syntax--elixir .syntax--constant.syntax--definition {
+  color: #61afef;
+}
+.syntax--source.syntax--elixir .syntax--variable.syntax--definition,
+.syntax--source.syntax--elixir .syntax--variable.syntax--anonymous {
+  color: #c678dd;
+}
+.syntax--source.syntax--elixir .syntax--parameter.syntax--variable.syntax--function {
+  color: #d19a66;
+  font-style: italic;
+}
+.syntax--source.syntax--elixir .syntax--quoted {
+  color: #98c379;
+}
+.syntax--source.syntax--elixir .syntax--keyword.syntax--special-method,
+.syntax--source.syntax--elixir .syntax--embedded.syntax--section,
+.syntax--source.syntax--elixir .syntax--embedded.syntax--source.syntax--empty {
+  color: #e06c75;
+}
+.syntax--source.syntax--elixir .syntax--readwrite.syntax--module .syntax--punctuation {
+  color: #e06c75;
+}
+.syntax--source.syntax--elixir .syntax--regexp.syntax--section,
+.syntax--source.syntax--elixir .syntax--regexp.syntax--string {
+  color: #be5046;
+}
+.syntax--source.syntax--elixir .syntax--separator,
+.syntax--source.syntax--elixir .syntax--keyword.syntax--operator {
+  color: #d19a66;
+}
+.syntax--source.syntax--elixir .syntax--variable.syntax--constant {
+  color: #e5c07b;
+}
+.syntax--source.syntax--elixir .syntax--array,
+.syntax--source.syntax--elixir .syntax--scope,
+.syntax--source.syntax--elixir .syntax--section {
+  color: #828997;
+}
+.syntax--source.syntax--gfm .syntax--markup {
+  -webkit-font-smoothing: auto;
+}
+.syntax--source.syntax--gfm .syntax--link .syntax--entity {
+  color: #61afef;
+}
+.syntax--source.syntax--go .syntax--storage.syntax--type.syntax--string {
+  color: #c678dd;
+}
+.syntax--source.syntax--ini .syntax--keyword.syntax--other.syntax--definition.syntax--ini {
+  color: #e06c75;
+}
+.syntax--source.syntax--java .syntax--storage.syntax--modifier.syntax--import {
+  color: #e5c07b;
+}
+.syntax--source.syntax--java .syntax--storage.syntax--type {
+  color: #e5c07b;
+}
+.syntax--source.syntax--java .syntax--keyword.syntax--operator.syntax--instanceof {
+  color: #c678dd;
+}
+.syntax--source.syntax--java-properties .syntax--meta.syntax--key-pair {
+  color: #e06c75;
+}
+.syntax--source.syntax--java-properties .syntax--meta.syntax--key-pair > .syntax--punctuation {
+  color: #abb2bf;
+}
+.syntax--source.syntax--js .syntax--keyword.syntax--operator {
+  color: #56b6c2;
+}
+.syntax--source.syntax--js .syntax--keyword.syntax--operator.syntax--delete,
+.syntax--source.syntax--js .syntax--keyword.syntax--operator.syntax--in,
+.syntax--source.syntax--js .syntax--keyword.syntax--operator.syntax--of,
+.syntax--source.syntax--js .syntax--keyword.syntax--operator.syntax--instanceof,
+.syntax--source.syntax--js .syntax--keyword.syntax--operator.syntax--new,
+.syntax--source.syntax--js .syntax--keyword.syntax--operator.syntax--typeof,
+.syntax--source.syntax--js .syntax--keyword.syntax--operator.syntax--void {
+  color: #c678dd;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--string.syntax--quoted.syntax--json {
+  color: #e06c75;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation.syntax--string {
+  color: #e06c75;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--value.syntax--json > .syntax--string.syntax--quoted.syntax--json > .syntax--punctuation {
+  color: #98c379;
+}
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--dictionary.syntax--json > .syntax--constant.syntax--language.syntax--json,
+.syntax--source.syntax--json .syntax--meta.syntax--structure.syntax--array.syntax--json > .syntax--constant.syntax--language.syntax--json {
+  color: #56b6c2;
+}
+.syntax--source.syntax--ruby .syntax--constant.syntax--other.syntax--symbol > .syntax--punctuation {
+  color: inherit;
+}
+.syntax--source.syntax--php .syntax--class.syntax--bracket {
+  color: #abb2bf;
+}
+.syntax--source.syntax--python .syntax--keyword.syntax--operator.syntax--logical.syntax--python {
+  color: #c678dd;
+}
+.syntax--source.syntax--python .syntax--variable.syntax--parameter {
+  color: #d19a66;
+}
+</style>
+  </head>
+  <body class='markdown-preview' data-use-github-style><h1 id="scheduler">Scheduler</h1>
+<hr>
+<p>L'applicativo java svolge il ruolo di scheduler, raccogliendo da un DB descrittori di processi e macchine virtuali per poi fornire in output uno <strong>scheduling</strong>, ovvero una lista di processi associati ad un tempo di start ed una macchina su cui eseguire.
+Opzionalmente una volta trovata l'allocazione ottimale, fornisce un servizio <em>deamon</em> che genera chiamate API all' allocator ad i tempi specificati nella schedule con il comando relativo.</p>
+<hr>
+<p><strong>e.g</strong></p>
+<h3 id="nella-schedule-della-macchina-mach1-presente-il-job-dummy-115-alle-17-55-34-818">Nella schedule della macchina mach1 è presente il job dummy 115 alle 17:55:34.818</h3>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>...</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>,&nbsp;dummy241&nbsp;19:19:34.821&nbsp;162&nbsp;&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>,&nbsp;dummy20&nbsp;16:52:14.816&nbsp;186&nbsp;&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>,&nbsp;...</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>,&nbsp;dummy115&nbsp;17:55:34.818&nbsp;327</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>,&nbsp;...</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>,&nbsp;dummy151&nbsp;18:19:34.819&nbsp;827</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>...</span></span></div></pre><h3 id="quindi-alle-17-55-34-818-dockertime">Quindi alle 17:55:34.818 - dockerTime</h3>
+<p><img alt="easySeq.png" src="/home/cioni/mesos/doc/easySeq1.png"></p>
+<hr>
+<h2 id="installazione">Installazione</h2>
+<p>Nell'archivio <em>scheduler.tar</em> sono inclusi :</p>
+<ul>
+<li>scheduler.jar</li>
+<li>install.sh</li>
+</ul>
+<p>Lanciando install.sh verranno creati dei file di configurazione: apis.properties, config.properties,allocator.properties.</p>
+<h3 id="apis-properties">apis.properties</h3>
+<p>Contiene info su le API dell' allocator.</p>
+<h3 id="config-properties">config.properties</h3>
+<p>Contiene info sul database e sui path dove salvare gli output</p>
+<h3 id="allocator-properties">allocator.properties</h3>
+<p>Contiene info sull' allocator</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>hostname="hostname"</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>port=8080</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>#secondi&nbsp;di&nbsp;anticipo&nbsp;rispetto&nbsp;allo&nbsp;scheduling&nbsp;per&nbsp;far&nbsp;partire&nbsp;un&nbsp;docker</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>dockerTime=10</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>#secondi&nbsp;di&nbsp;anticipo&nbsp;rispetto&nbsp;allo&nbsp;scheduling&nbsp;per&nbsp;far&nbsp;partire&nbsp;una&nbsp;VM</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>VMTime=60</span></span></div></pre><p>Configurati correttamente i file si può lanciare l'applicativo con:</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>java&nbsp;-jar&nbsp;scheduler.jar</span></span></div></pre><p>Oppure per testare senza un DB :</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>java&nbsp;-jar&nbsp;scheduler.jar&nbsp;-t</span></span></div></pre><h2 id="utilizzo">Utilizzo</h2>
+<p>Il file ''RealTester.java'' è un esempio del funzionamento del framework.</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>//Creo&nbsp;un&nbsp;DbInterface&nbsp;per&nbsp;recuperare&nbsp;dati&nbsp;dal&nbsp;DB</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>DbInterface&nbsp;dbInterface=&nbsp;new&nbsp;DbInterface(properties.getProperty("db"),properties.getProperty("user"),properties.getProperty("password"),properties.getProperty("procs_table"),properties.getProperty("sched_table"),properties.getProperty("host_table"));</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>//questo&nbsp;fa&nbsp;un&nbsp;TRUNCATE_TABLE&nbsp;della&nbsp;table&nbsp;con&nbsp;i&nbsp;job&nbsp;schedulati</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>dbInterface.cleanDB();</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>//Recupero&nbsp;dal&nbsp;DB&nbsp;le&nbsp;macchine&nbsp;su&nbsp;cui&nbsp;schedulare</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>List&lt;Host&gt;&nbsp;vmPark=dbInterface.getMachines();</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>//Recupero&nbsp;dal&nbsp;DB&nbsp;i&nbsp;job&nbsp;da&nbsp;schedulare</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>List&lt;Job&gt;&nbsp;jobs&nbsp;=&nbsp;dbInterface.getDockers();</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>//Manager&nbsp;vm//</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>ScheduleManager&nbsp;vmManager&nbsp;=&nbsp;new&nbsp;ScheduleManager(vmPark);</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>//&nbsp;Passo&nbsp;allo&nbsp;scheduler&nbsp;una&nbsp;lista&nbsp;di&nbsp;Jobs//</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>vmManager.setNewSchedule(jobs);</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>//&nbsp;Alloco&nbsp;i&nbsp;Jobs</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>vmManager.allocateJobs();</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>//Creo&nbsp;il&nbsp;Deamon,&nbsp;client&nbsp;che&nbsp;invia&nbsp;ai&nbsp;vari&nbsp;docker_server&nbsp;i&nbsp;comandi</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>PlannerDeamon&nbsp;deam&nbsp;=&nbsp;new&nbsp;PlannerDeamon();</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>//</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>for(Receiver&nbsp;m:vmPark){</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;lg.logNodeInfo(m,"");</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;m.saveSchedule();</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;m.saveLoads();</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;m.saveScheduleToDB();</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;deam.dockerScan(m,m.getCurrentSchedule());</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>}</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>//lancio&nbsp;il&nbsp;thread&nbsp;PlannerDeamon</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>deam.run();</span></span></div></pre><h2 id="struttura">Struttura</h2>
+<h3 id="uml">UML</h3>
+<p><img alt="diag.png" src="/home/cioni/mesos/doc/diag.png">
+Diagramma semplificato componenti</p>
+<p><img alt="seq.png" src="/home/cioni/mesos/doc/seq.png">
+Sequence diagram semplificato</p>
+<h3 id="host">Host</h3>
+<p>La classe Host serve a modellare sia un host virtuale (su cui verrano schedulati i Docker) che un host fisico,(su cui verranno schedulate le VM).</p>
+<h4 id="attributi-host">Attributi host</h4>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>private&nbsp;int&nbsp;totalCPU;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//CPU&nbsp;TOTALI</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>private&nbsp;int&nbsp;totalMEM;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//RAM&nbsp;TOTALE</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>private&nbsp;int&nbsp;totalDSK;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//DISCO&nbsp;TOTALE</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>private&nbsp;int&nbsp;usedCPU;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//CPU&nbsp;UTILIZZATA</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>private&nbsp;int&nbsp;usedMEM;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//MEMORIA&nbsp;UTILIZZATA</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>private&nbsp;int&nbsp;usedDSK;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//DISCO&nbsp;UTILIZZATO</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>private&nbsp;boolean&nbsp;isSchedulable=true;//Se&nbsp;false&nbsp;lo&nbsp;scheduler&nbsp;lo&nbsp;ignora</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;//e&nbsp;l'assegnazione&nbsp;dovrà&nbsp;essere&nbsp;fatta&nbsp;manualmente</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>private&nbsp;int&nbsp;expectedCPU;&nbsp;&nbsp;&nbsp;&nbsp;//valore&nbsp;medio&nbsp;CPU&nbsp;atteso&nbsp;dati&nbsp;i&nbsp;job&nbsp;in&nbsp;coda</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>private&nbsp;int&nbsp;expectedRAM;&nbsp;&nbsp;&nbsp;&nbsp;//valore&nbsp;medio&nbsp;RAM&nbsp;atteso&nbsp;dati&nbsp;i&nbsp;job&nbsp;in&nbsp;coda</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>private&nbsp;int&nbsp;expextedDSK;&nbsp;&nbsp;&nbsp;&nbsp;//valore&nbsp;medio&nbsp;DISCO&nbsp;atteso&nbsp;dati&nbsp;i&nbsp;job&nbsp;in&nbsp;coda</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>private&nbsp;Receiver&nbsp;assignedMachine;//Macchina&nbsp;a&nbsp;cui&nbsp;è&nbsp;assegnata&nbsp;l'host.</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>private&nbsp;float&nbsp;treshold;//SOGLIA&nbsp;massima&nbsp;di&nbsp;utilizzo&nbsp;risorse</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>private&nbsp;List&lt;Schedulable&gt;&nbsp;inExecution;//Lista&nbsp;di&nbsp;Schedulable&nbsp;allocati&nbsp;sulla&nbsp;macchina</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>private&nbsp;Map&lt;Schedulable,LocalDateTime&gt;&nbsp;currentSchedule;//Mappa&nbsp;di&nbsp;Schedulable,StartTime&nbsp;allocati</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>public&nbsp;String&nbsp;ID;//ID&nbsp;dell'Host</span></span></div></pre><h4 id="metodi-host">Metodi host</h4>
+<p>checkSchedule</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>/**</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;*&nbsp;Data&nbsp;una&nbsp;Mappa(Schedulable,StartTime)&nbsp;controllo&nbsp;che&nbsp;l'utilizzo&nbsp;delle&nbsp;risorse&nbsp;rimanga</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;*&nbsp;sotto&nbsp;la&nbsp;soglia</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;*&nbsp;Per&nbsp;ogni&nbsp;Schedulable&nbsp;controllo&nbsp;al&nbsp;tempo&nbsp;di&nbsp;start&nbsp;il&nbsp;carico&nbsp;sulla&nbsp;macchina.</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;*/</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>public&nbsp;boolean&nbsp;checkSchedule(Map&lt;Schedulable,LocalDateTime&gt;&nbsp;proposedSchedule)</span></span></div></pre><p>queueJob</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>/**</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;*&nbsp;Tenta&nbsp;di&nbsp;allocare&nbsp;uno&nbsp;Schedulable,&nbsp;controlla&nbsp;l'utilizzo&nbsp;delle&nbsp;risorse&nbsp;al&nbsp;tStart&nbsp;dello&nbsp;schedulable</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;*&nbsp;se&nbsp;il&nbsp;controllo&nbsp;fallisce&nbsp;ritorna&nbsp;false.</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;*/</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>public&nbsp;boolean&nbsp;queueJob(Schedulable&nbsp;j)</span></span></div></pre><p>jobsAtTimeT</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>/**</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>*&nbsp;Ritorna&nbsp;una&nbsp;lista&nbsp;di&nbsp;{@link&nbsp;Job}&nbsp;che&nbsp;sarebbero&nbsp;in&nbsp;esecuzione</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>al&nbsp;tempo&nbsp;t&nbsp;secondo&nbsp;la&nbsp;{@link&nbsp;Map&lt;Job,LocalDateTime&gt;}proposedSchedule</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>*/</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>private&nbsp;List&lt;Schedulable&gt;&nbsp;jobsAtTimeT&nbsp;(LocalDateTime&nbsp;t,&nbsp;Map&lt;Schedulable,LocalDateTime&gt;&nbsp;proposedSchedule)</span></span></div></pre><p>checkLoadAtTime</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>/**</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;*&nbsp;Data&nbsp;una&nbsp;schedule(Mappa(Schedulable,StartTime))&nbsp;ed&nbsp;un&nbsp;istante&nbsp;di&nbsp;tempo&nbsp;t&nbsp;ritorna</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;il&nbsp;carico&nbsp;medio(CPU+RAM+DSK)/3&nbsp;sulla&nbsp;macchina</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;*&nbsp;Ritorna&nbsp;un&nbsp;float&nbsp;tra&nbsp;0.0&nbsp;e&nbsp;1.0&nbsp;con</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;il&nbsp;"carico"&nbsp;eventuale&nbsp;al&nbsp;tempo&nbsp;con&nbsp;la&nbsp;currentSchedule</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;*/</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;public&nbsp;float&nbsp;checkLoadAtTime(LocalDateTime&nbsp;t,Map&lt;Schedulable,LocalDateTime&gt;&nbsp;proposedSchedule)</span></span></div></pre><p>checkResAtTime</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>\\Ritorna&nbsp;un&nbsp;array&nbsp;di&nbsp;float&nbsp;con</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>\\l'utilizzo&nbsp;delle&nbsp;risorse&nbsp;al&nbsp;tempo&nbsp;t&nbsp;con&nbsp;la&nbsp;currentSchedule</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>checkResAtTime(java.time.LocalDateTime&nbsp;t,&nbsp;java.util.Map&lt;Schedulable,java.time.LocalDateTime&gt;&nbsp;proposedSchedule)</span></span></div></pre><p>setStart</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>\\Permette&nbsp;di&nbsp;settare&nbsp;l'accensione&nbsp;dell'host.</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>setStart(java.time.LocalDateTime&nbsp;t)</span></span></div></pre><h3 id="interfacce-schedulable-e-recevier">Interfacce Schedulable e Recevier</h3>
+<p>Schedulable e Recevier sono due interfacce necessarie per modellare gli oggetti che vanno rispettivamente schedulati
+e quelli le cui risorse vanno ottimizzate. In altre parole:</p>
+<table>
+<thead>
+<tr>
+<th><em>Schedulable</em></th>
+<th><em>Recevier</em></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Docker</td>
+<td>VM</td>
+<td>I docker sono schedulati sulle VM</td>
+</tr>
+<tr>
+<td>VM</td>
+<td>Macchina</td>
+<td>Le VM sono schedulate sulle le macchine</td>
+</tr>
+</tbody>
+</table>
+<p>Per questo la classe Host espone entrambe le interfacce.</p>
+<p><img alt="interf.png" src="/home/cioni/mesos/doc/interf.png"></p>
+<h2 id="binpacker">BinPacker</h2>
+<p>La classe BinPacker offre un solo metodo statico che è il cuore dello scheduling.</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>\\Dati&nbsp;una&nbsp;lista&nbsp;di&nbsp;Receiver&nbsp;ed&nbsp;un&nbsp;Schedulable&nbsp;seleziona&nbsp;l'Host</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>\\ottimale&nbsp;per&nbsp;l'esecuzione&nbsp;dello&nbsp;Schedulable</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>findOptimum(Schedulable&nbsp;toBeScheduled,&nbsp;java.util.List&lt;?&nbsp;extends&nbsp;Receiver&gt;&nbsp;park)</span></span></div></pre><p>Quindi data una lista di Receiver ed uno schedulable
+findOptimum cerca di allocare lo Schedulable nel Receiver migliore (secondo una politica che minimizza il numero di Receiver) sotto i vincoli di utilizzo delle risorse.
+La soglia di carico massimo (treshold) è un attributo di ogni singolo Host, quindi dipende da ogni Receiver.</p>
+<h2 id="schedulemanager">ScheduleManager</h2>
+<p>ScheduleManager è la classe che gestisce le operazioni di inserimento degli Schedulable e dei Receiver e la conseguente allocazione.</p>
+<h3 id="metodi-di-schedulemanager">Metodi di ScheduleManager</h3>
+<p>Costruttore. Riceve una lista di Receiver che saranno i nodi su cui allocare gli Schedulable</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>public&nbsp;ScheduleManager&nbsp;(List&lt;?&nbsp;extends&nbsp;Receiver&gt;&nbsp;toBeManaged){</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;this.nodes=toBeManaged;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;}</span></span></div></pre><p>setNewSchedule</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>/**</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;*&nbsp;Inserisce&nbsp;una&nbsp;nuova&nbsp;lista&nbsp;di&nbsp;elementi&nbsp;Schedulable&nbsp;e&nbsp;li&nbsp;ordina&nbsp;per&nbsp;startTime</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;*&nbsp;@param&nbsp;schedule</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;*/</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>public&nbsp;void&nbsp;setNewSchedule(List&lt;?&nbsp;extends&nbsp;Schedulable&gt;&nbsp;schedule)&nbsp;{</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;this.toBeAllocated&nbsp;=&nbsp;schedule;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;this.failedToAllocate=new&nbsp;ArrayList&lt;&gt;(schedule);</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;this.allocated=new&nbsp;ArrayList&lt;&gt;();</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;sortJobs();</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>}</span></span></div></pre><p>allocateJobs</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>/**</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>*Scorre&nbsp;la&nbsp;lista&nbsp;dei&nbsp;Job&nbsp;da&nbsp;essere&nbsp;allocati&nbsp;e&nbsp;tenta&nbsp;di&nbsp;assegnarli&nbsp;alle&nbsp;macchine.</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;*&nbsp;Se&nbsp;il&nbsp;binPacker&nbsp;fallisce&nbsp;nel&nbsp;restituire&nbsp;un&nbsp;nodo&nbsp;ottimale&nbsp;,</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;*allora&nbsp;si&nbsp;cambia&nbsp;lo&nbsp;startTime&nbsp;del&nbsp;processo</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;*Ritorna&nbsp;True&nbsp;se&nbsp;e&nbsp;solo&nbsp;se&nbsp;tutti&nbsp;i&nbsp;Job&nbsp;sono&nbsp;stati&nbsp;assegnati&nbsp;ad&nbsp;una&nbsp;macchina.</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>*/</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;public&nbsp;boolean&nbsp;allocateJobs(){</span></span></div></pre><p>addHotJob</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>/**Aggiunge&nbsp;un&nbsp;nuovo&nbsp;Schedulable&nbsp;alla&nbsp;lista&nbsp;e&nbsp;lo&nbsp;schedula&nbsp;senza</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>*rimuovere&nbsp;i&nbsp;precedenti&nbsp;allocamenti.</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>*/</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>public&nbsp;void&nbsp;addHotJob(Schedulable&nbsp;j){</span></span></div></pre><p>esempio:</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>List&lt;Host&gt;&nbsp;park;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>List&lt;Job&gt;&nbsp;jobs</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>ScheduleManager&nbsp;scheduleManager&nbsp;=&nbsp;new&nbsp;ScheduleManager(park);</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>//&nbsp;Passo&nbsp;allo&nbsp;scheduler&nbsp;una&nbsp;lista&nbsp;di&nbsp;Jobs</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>scheduleManager.setNewSchedule(jobs);</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>//&nbsp;Alloco&nbsp;i&nbsp;Jobs</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>scheduleManager.allocateJobs();</span></span></div></pre><h3 id="after-scheduling-job-add">After-Scheduling Job Add</h3>
+<p>L'inserimento e la schedulazione di Jobs è possibile anche in forma parziale, ovvero è possibile schedulare un numero di Jobs per poi schedularne altri ... . Chiamando il deamon.</p>
+<h3 id="hot-add">Hot add</h3>
+<p><code style="font-family: Menlo, Consolas, &quot;DejaVu Sans Mono&quot;, monospace;">ScheduleManager.addHotJob(Schedulable j);</code>
+In questo caso il sistema tenta di allocare il job mantenento la schedule precendente. (Se fallisce chiama Cold-add? Cosa succede se cambio la schedule mentre è in esecuzione?)</p>
+<h3 id="cold-add">Cold add</h3>
+<p>In questo caso il sistema rischedula l'intero insieme di Jobs, ovvero quelli già schedulati più quello da aggiungere.</p>
+<h2 id="deamon">Deamon</h2>
+<p>Il Deamon gira come thread separato dal resto.
+Recupera la schedule generata dal Manager e comunica con l'allocator tramite le apposite API.
+Al momento l'unico modo con cui ciò avviene è tramite il flow esposto nel sequence diagram, ma è facilmente implementabile una soluzione dove il Deamon possa essere chiamato separatamente recuperando una schedule generata precedentemente da un DB o da un file.</p>
+<pre class="editor-colors lang-"><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>PlannerDeamon&nbsp;deamon&nbsp;=&nbsp;new&nbsp;PlannerDeamon();&nbsp;//creo&nbsp;il&nbsp;Deamon</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>for(Receiver&nbsp;m:machines){</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;lg.logNodeInfo(m,"");</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;m.saveSchedule();</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;m.saveLoads();</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;deamon.vMScan(m,m.getCurrentSchedule());</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;//Aggiungo&nbsp;le&nbsp;VM&nbsp;con&nbsp;la&nbsp;relativa&nbsp;schedule</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>}</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>for(Receiver&nbsp;m:vmPark){</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;lg.logNodeInfo(m,"");</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;m.saveSchedule();</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;m.saveLoads();</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;deamon.dockerScan(m,m.getCurrentSchedule());</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>&nbsp;&nbsp;&nbsp;&nbsp;//Aggiungo&nbsp;i&nbsp;docker&nbsp;con&nbsp;la&nbsp;relativa&nbsp;schedule</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>}</span></span></div><div class="line"><span class="syntax--text syntax--plain syntax--null-grammar"><span>deam.run();</span></span></div></pre><h3 id="allocator">allocator</h3>
+<p>Componente python che svolge il ruolo di interfaccia fra il sistema e docker.
+(server) riceve via socket dal PlannerDeamon(client) i segnali di DOCKERON,DOCKEROFF,... e chiama le API Docker corrispondenti.</p>
+<p>Questo componente deve essere presente in ogni macchina su cui si voglia schedulare.</p>
+<p>[grafico UML]</p></body>
+</html>

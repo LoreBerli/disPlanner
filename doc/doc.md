@@ -2,7 +2,7 @@
 # Scheduler
 ---
 L'applicativo java svolge il ruolo di scheduler, raccogliendo da un DB descrittori di processi e macchine virtuali per poi fornire in output uno **scheduling**, ovvero una lista di processi associati ad un tempo di start ed una macchina su cui eseguire.
-Opzionalmente una volta trovata l'allocazione ottimale, fornisce un servizio *deamon* che genera chiamate API al dockerHandler ad i tempi specificati nella schedule con il comando relativo.
+Opzionalmente una volta trovata l'allocazione ottimale, fornisce un servizio *deamon* che genera chiamate API all' allocator ad i tempi specificati nella schedule con il comando relativo.
 
 ---
 **e.g**
@@ -32,11 +32,11 @@ Nell'archivio *scheduler.tar* sono inclusi :
 Lanciando install.sh verranno creati dei file di configurazione: apis.properties, config.properties,allocator.properties.
 
 ### apis.properties
-Contiene info su le API del dockerHandler.
+Contiene info su le API dell' allocator.
 ### config.properties
 Contiene info sul database e sui path dove salvare gli output
 ### allocator.properties
-Contiene info sul dockerHandler
+Contiene info sull' allocator
 ```
 hostname="hostname"
 port=8080
@@ -57,8 +57,45 @@ Oppure per testare senza un DB :
 java -jar scheduler.jar -t
 ```
 
+## Utilizzo
+Il file ''RealTester.java'' è un esempio del funzionamento del framework.
+```
+//Creo un DbInterface per recuperare dati dal DB
+DbInterface dbInterface= new DbInterface(properties.getProperty("db"),properties.getProperty("user"),properties.getProperty("password"),properties.getProperty("procs_table"),properties.getProperty("sched_table"),properties.getProperty("host_table"));
+//questo fa un TRUNCATE_TABLE della table con i job schedulati
+dbInterface.cleanDB();
 
+//Recupero dal DB le macchine su cui schedulare
+List<Host> vmPark=dbInterface.getMachines();
 
+//Recupero dal DB i job da schedulare
+List<Job> jobs = dbInterface.getDockers();
+
+//Manager vm//
+ScheduleManager vmManager = new ScheduleManager(vmPark);
+
+// Passo allo scheduler una lista di Jobs//
+vmManager.setNewSchedule(jobs);
+
+// Alloco i Jobs
+vmManager.allocateJobs();
+
+//Creo il Deamon, client che invia ai vari docker_server i comandi
+PlannerDeamon deam = new PlannerDeamon();
+
+//
+for(Receiver m:vmPark){
+    lg.logNodeInfo(m,"");
+    m.saveSchedule();
+    m.saveLoads();
+
+    m.saveScheduleToDB();
+    deam.dockerScan(m,m.getCurrentSchedule());
+}
+
+//lancio il thread PlannerDeamon
+deam.run();
+```
 ## Struttura
 ### UML
 ![diag.png](diag.png)
@@ -234,7 +271,7 @@ In questo caso il sistema rischedula l'intero insieme di Jobs, ovvero quelli gi�
 
 ## Deamon
 Il Deamon gira come thread separato dal resto.
-Recupera la schedule generata dal Manager e comunica col dockerHandler tramite le apposite API.
+Recupera la schedule generata dal Manager e comunica con l'allocator tramite le apposite API.
 Al momento l'unico modo con cui ciò avviene è tramite il flow esposto nel sequence diagram, ma è facilmente implementabile una soluzione dove il Deamon possa essere chiamato separatamente recuperando una schedule generata precedentemente da un DB o da un file.
 
 ```
@@ -259,8 +296,18 @@ for(Receiver m:vmPark){
 }
 deam.run();
 ```
-### dockerHandler
+### Allocator
 Componente python che svolge il ruolo di interfaccia fra il sistema e docker.
-dockerHandler(server) riceve via socket dal PlannerDeamon(client) i segnali di DOCKERON,DOCKEROFF,... e chiama le API Docker corrispondenti.
+(server) riceve via socket dal PlannerDeamon(client) i segnali di DOCKERON,DOCKEROFF,... e chiama le API Docker corrispondenti.
 
-[grafico UML]
+Questo componente deve essere presente in ogni macchina su cui si voglia schedulare.
+
+
+
+```
+python3 allocator.py ../MesosPlanner/config.properties
+
+```
+
+
+![big.png](big.png)
